@@ -58,13 +58,13 @@ public class Map {
 		return TYPE_RESOURCE_DICT[type];
 	}
 
-	public Map(int nrows,int ncols,int nvers){
-		background_g = new int[nrows,ncols,nvers];
-		g = new int[nrows,ncols,nvers];
-		background_links = new GameObject[nrows,ncols,nvers];
-		g_links = new GameObject[nrows,ncols,nvers];
+	public Map() {
+		//background_g = new int[nrows,ncols,nvers];
+		//g = new int[nrows,ncols,nvers];
+		//background_links = new GameObject[nrows,ncols,nvers];
+		//g_links = new GameObject[nrows,ncols,nvers];
 		game_objects = new LinkedList<GameObject> ();
-		for (int i=0; i<background_g.GetLength(0); i++) {
+		/*for (int i=0; i<background_g.GetLength(0); i++) {
 			for (int j=0; j<background_g.GetLength(1); j++) {
 				for (int k=0; k<background_g.GetLength(2); k++) {
 					background_g[i,j,k] = EMPTY;
@@ -73,7 +73,31 @@ public class Map {
 					g_links[i,j,k] = null;
 				}
 			}
+		}*/
+	}
+
+	public void render() {
+		int[][,,] level1 = Level1.getLevel ();
+		int[,,] state1 = level1 [0];
+		Debug.Log (state1.GetLength(0) + "   " + state1.GetLength(1) + "   " + state1.GetLength(2));
+
+		for (int y = 0; y < state1.GetLength(0); y++) {
+			for (int z = 0; z < state1.GetLength(1); z++) {
+				for (int x = 0; x < state1.GetLength(2); x++) {
+					if (y == 0) {
+						renderGameObject(new Vector3(x, y, z), "InterBox");
+					}
+					string resource = Level1.tileMapping[state1[y, z, x]];
+					if (resource != "EMPTY") {
+						renderGameObject(new Vector3(x, y + 0.5f, z), resource);
+					}
+				}
+			}
 		}
+	}
+
+	private void renderGameObject(Vector3 loc, string resource) {
+		Object.Instantiate(Resources.Load(resource) as GameObject, loc, Quaternion.identity);
 	}
 
 	public int getNRows(){

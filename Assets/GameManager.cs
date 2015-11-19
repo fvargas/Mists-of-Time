@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
 	public static int ISOMETRIC_VIEW = 1;
 	public static int THIRD_PERSON_VIEW = 2;
 	public static int camera_view = ISOMETRIC_VIEW;//1 - Isometric; 2 - Third Person
-	public Map m = new Map (8,3,8);
+	public Map m = new Map ();
     public Button button;
 	public GameObject [] cameras;
     public bool beforeGame = true;
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour {
 	};
 	// Use this for initialization
 	void Start () {
-		LoadScene (m);
+		m.render ();
 	}
 
 	public static void setMark(Vector3 r){
@@ -188,11 +188,11 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		m.syncCoordinates ();
+		/*m.syncCoordinates ();
 		current_interval += Time.deltaTime;
 		if (current_interval > interval) {
 			current_interval = 0f;
 			//flipMap(1,1);
-		}
+		}*/
 	}
 }

@@ -1,22 +1,26 @@
 using System.Collections.Generic;
 
-class Level1 : LevelInterface
+class Level1
 {
 	public static readonly Dictionary<int, string> tileMapping = new Dictionary<int, string>
 	{
 		{ 0, "EMPTY" },
 		{ 1, "crystalC" },
+		{ 2, "EMPTY"  },
 	};
 
 
-	int[,,,] getLevel()
+	public static int[][,,] getLevel()
 	{
-		return { getState1(), getState2(), getState3() };
+		int[,,] state1 = getState1 ();
+		int[,,] state2 = getState2 ();
+		int[,,] state3 = getState3 ();
+		return new int[][,,] { state1, state2, state3 };
 	}
 
-	int[,,] getState1()
+	private static int[,,] getState1()
 	{
-		return
+		return new int[,,]
 		{
 			{
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
@@ -89,12 +93,12 @@ class Level1 : LevelInterface
 		};
 	}
 
-	int[,,] getState2()
+	private static int[,,] getState2()
 	{
-        return
+		return new int[,,]
         {
             {
-                {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 { 0, 0, 0, 2, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0},
                 { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -160,13 +164,13 @@ class Level1 : LevelInterface
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-			}
-        };
+			},
+		};
 	}
 
-	int[,,] getState3()
+	private static int[,,] getState3()
 	{
-		return
+		return new int[,,]
 		{
 			{
 				{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
