@@ -1,0 +1,4 @@
+interface LevelInterface
+{
+	int[,,,] getLevel();
+}
