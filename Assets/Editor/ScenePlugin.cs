@@ -63,4 +63,9 @@ public class ScenePlugin {
 		p.WaitForExit();
 		p.Close();
 	}
+	[MenuItem("Tools/Sample Scene")]
+	public static void SampleScene() {
+		GameManager gm = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		UnityEditor.Debug.Log(Utils.toString (gm.m.background_g));
+	}
 }
