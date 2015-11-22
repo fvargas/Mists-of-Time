@@ -61,7 +61,7 @@ public class Map {
 
 	public Map() {
 		background_g = new int[Level1.x,Level1.z,Level1.y];
-		g = new int[Level1.x,Level1.z,Level1.y];
+		g = Level1.getLevel () [0];//new int[Level1.x,Level1.z,Level1.y];
 		background_links = new GameObject[Level1.x,Level1.z,Level1.y];
 		g_links = new GameObject[Level1.x,Level1.z,Level1.y];
 		game_objects = new LinkedList<GameObject> ();
@@ -69,7 +69,7 @@ public class Map {
 			for (int j=0; j<background_g.GetLength(1); j++) {
 				for (int k=0; k<background_g.GetLength(2); k++) {
 					background_g[i,j,k] = EMPTY;
-					g[i,j,k] = EMPTY;
+					//g[i,j,k] = EMPTY;
 					background_links[i,j,k] = null;
 					g_links[i,j,k] = null;
 				}
@@ -104,7 +104,10 @@ public class Map {
 	}
 
 	private void renderGameObject(Vector3 loc, string resource) {
-		Object.Instantiate(Resources.Load(resource) as GameObject, loc, Quaternion.identity);
+		GameObject obj = (GameObject) Object.Instantiate(Resources.Load(resource) as GameObject, loc, Quaternion.identity);
+		if (resource == "Dragon") {
+			obj.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
+		}
 	}
 
 	public int getNRows(){

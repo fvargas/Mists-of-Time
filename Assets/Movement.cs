@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Movement : MonoBehaviour
 {
 
-    public GameObject target;
+    private GameObject target;
     public string behav;
     private float elapsed_time = 0.0f;
     private float wander_interval = 8f;
@@ -21,7 +21,7 @@ public class Movement : MonoBehaviour
     public bool fleeing = false;
 
     public List<Vector3> target_path;
-	Vector3 prev_warrior;
+	Vector3 prev_target_loc;
 	public float interval;
 	private float current_interval = 0f;
 
@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        target = (target == null) ? GameObject.Find("Cube") : target;
+		target = GameObject.Find ("magic_archer");
         current_acceleration = max_speed;
         if (behav == "")
         {
@@ -51,6 +51,7 @@ public class Movement : MonoBehaviour
     void Update()
     {
         var targetDirection = target.transform.position - this.transform.position;
+
         if (fleeing && (targetDirection.magnitude < 30.0f))
         {
             behav = "Flee";
@@ -109,12 +110,12 @@ public class Movement : MonoBehaviour
         else if (behav == "Chase")
         {
 			current_interval += Time.deltaTime;
-			Vector3 warrior_location = GameObject.Find ("Warrior").transform.position;
+			Vector3 target_loc = target.transform.position;
 
-			if (Vector3.Distance(prev_warrior, warrior_location) > 2.0 && current_interval > interval) {
+			if (Vector3.Distance(prev_target_loc, target_loc) > 2.0 && current_interval > interval) {
 				current_interval = 0f;
-				prev_warrior = warrior_location;
-				Plan (prev_warrior);
+				prev_target_loc = target_loc;
+				Plan (prev_target_loc);
 			}
 
 			followPath ();
@@ -361,7 +362,7 @@ public class Movement : MonoBehaviour
 
 	public void Plan (Vector3 target)
 	{
-		int[, ,] grid = m.getMatrix();
+		int[,,] grid = m.getMatrix();
 		PQ pq = new PQ();
 		HashSet<Vector3> visited = new HashSet<Vector3>();
 		int target_x = Map.getRowNumber(target.x);
