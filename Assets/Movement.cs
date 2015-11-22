@@ -155,137 +155,25 @@ public class Movement : MonoBehaviour
 
     bool ReachGoal(Vector3 destination, bool following = false)
     {
-        /*var origRotation = this.transform.rotation;
-
-        var bearing = this.transform.position - destination;
-        int has_obstacles = hasObstacles ();
-        //Debug.Log(bearing.magnitude);
-        //Acceleration threshold.
-
-        int[, ,] grid = m.getMatrix();
-        int row = Map.getRowNumber(this.transform.position.x);
-        int ver = Map.getVerNumber(this.transform.position.y);
-        int col = Map.getColNumber(this.transform.position.z);
-        var atLadder = m.getGridValue(row, ver, col] == Map.GO_LADDER;
-        var objBounds = GetComponent<MeshRenderer>().bounds;
-
-        var movingVert = (destination.y > this.transform.position.y + 0.3f) || (destination.y < this.transform.position.y - 0.3f);
-
-        //var movingVert = (destination.y > this.transform.position.y) && atLadder;
-
-        //if (bearing.magnitude > 0.5f)
-        //{
-            current_acceleration = 2.7f;
-
-        //}
-        //Deceleration threshold.
-        //else
-        //{
-        //    current_acceleration = -2.7f;
-        //}
-
-        //Perform rotation.
-
-
-		if (has_obstacles == 0) {
-			if (bearing.magnitude > 1.8f) {
-				var direction = this.transform.position - destination;
-				//direction.y = 0;
-				var seek_rotation = Quaternion.LookRotation (direction);
-				this.transform.rotation = Quaternion.Slerp (this.transform.rotation, seek_rotation, 0.5f);
-				//this.transform.rotation = new Quaternion(this.transform.rotation.x,this.transform.rotation.y,0,this.transform.rotation.w);
-				//this.transform.rotation.SetLookRotation(direction);
-				//this.transform.LookAt(this.transform.position + direction);
-			}
-			int new_has_obstacles = hasObstacles ();
-			if (new_has_obstacles != 0) {
-				this.transform.rotation = origRotation;
-			}
-		}else{
-			adjustDirection(origRotation,has_obstacles);
-		}
-
-
-        //Update the speed of the object.
-        current_speed += current_acceleration * Time.deltaTime;
-        if (current_speed > (following ? (max_speed * 2.0f) : max_speed))
-        {
-            current_speed = (following ? (max_speed * 2.0f) : max_speed);
-        }
-        else if (current_speed < 0)
-        {
-            current_speed = 0f;
-        }
-
-        //Shift the position.
-        //if (movingVert && atLadder)
-        //{
-
-
-        //    if (destination.y > this.transform.position.y + .3)
-        //    {
-        //        this.transform.position += this.transform.up * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
-        //    }
-        //    else if (destination.y < this.transform.position.y - .3)
-        //    {
-        //        this.transform.position -= this.transform.up * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
-        //    }
-        //}
-        //else
-        //{
-
-        //    this.transform.position = this.transform.position + -1 * this.transform.forward * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
-        //}
-        this.transform.position = this.transform.position + -1 * this.transform.forward * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
-        bearing = destination - this.transform.position;
-        //Debug.Log(bearing.magnitude);
-        bool flag = bearing.magnitude < 1f;
-        if (flag) {
-            //this.transform.position = new Vector3(destination.x, Map.getYCoordinate(Map.getVerNumber(this.transform.position.y)), destination.z);
-        }
-        //Debug.Log(flag);
-        //Debug.Log(&target_path[0]);
-        return flag;*/
         current_acceleration = 2.7f;
         
-        // current_speed += current_acceleration * Time.deltaTime;
-        // if (current_speed > max_speed)
-        // {
-            // current_speed = max_speed;
-        // }
-        
         var obstacles = hasObstacles();
-        if(obstacles != 0)
+        if (obstacles != 0)
         {
             adjustDirection(this.transform.rotation, obstacles);
             this.transform.position -= this.transform.right * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
         }
         else
         {
-        
             var direction = destination - this.transform.position;
-            //var toLookAt = new Vector3(direction.z, direction.y, -direction.x);
-            //var seek_rotation = Quaternion.LookRotation (toLookAt);
-            //this.transform.rotation = Quaternion.Slerp (this.transform.rotation, seek_rotation, 1.0f);
-            //var toLookAt = new Vector3(direction.z, direction.y, -direction.x);
             this.transform.LookAt((this.transform.position + direction));
-            //this.transform.LookAt((this.transform.position + toLookAt));
             this.transform.Rotate(new Vector3(0,90,0));
             direction.Normalize();
             this.transform.position += direction * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
         }
 
 		var bearing = destination - this.transform.position;
-        // int row = Map.getRowNumber(this.transform.position.x);
-        // int ver = Map.getVerNumber(this.transform.position.y);
-        // int col = Map.getColNumber(this.transform.position.z);
-        // int row2 = Map.getRowNumber(destination.x);
-        // int ver2 = Map.getVerNumber(destination.y);
-        // int col2 = Map.getColNumber(destination.z);
-		bool flag = bearing.magnitude < 1.0f;
-        //bool flag = (row == row2 && ver == ver2 && col == col2);
-
-		return flag;
+		return bearing.magnitude < 1.0f;
     }
 
 	/**
@@ -325,8 +213,6 @@ public class Movement : MonoBehaviour
 
     Vector3 Flee(Vector3 target)
     {
-
-
         var bearing = this.transform.position - target;
         //Debug.Log(bearing.magnitude);
         //Acceleration threshold.
