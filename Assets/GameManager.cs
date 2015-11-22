@@ -52,47 +52,9 @@ public class GameManager : MonoBehaviour {
 		m.render ();
 	}
 
-	public static void setMark(Vector3 r){
+	public static void setMark(Vector3 r) {
 		GameObject go = Instantiate(Resources.Load("book") as GameObject);
 		go.transform.position = r;
-	}
-
-	void LoadScene(Map m){
-		// Load background
-		GameObject [] gos = GameObject.FindGameObjectsWithTag ("GO_LAVA");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			//Debug.Log ("LAVA Found");
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_ROCK");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		/*
-		gos = GameObject.FindGameObjectsWithTag ("GO_WATER");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_PATH");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}*/
-
-
-		//Load objects
-		/*
-		gos = GameObject.FindGameObjectsWithTag ("GO_OBSTACLE");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_TREE");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_LADDER");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}*/
 	}
 
 	public void SwitchChasing(){
@@ -131,7 +93,7 @@ public class GameManager : MonoBehaviour {
 		GameObject new_go = Instantiate(Resources.Load(Map.TYPE_RESOURCE_DICT[new_tile_type]) as GameObject);
 		new_go.transform.position = new Vector3(Map.getXCoordinate(row),below_y,Map.getZCoordinate(col));
 		new_go.GetComponent<TileControl> ().born (interval,Map.getYCoordinate (ver),m);
-		m.registerBackgroundGameObject (new_go);
+		//m.registerBackgroundGameObject (new_go);
 	}
 
 	public void flipMap(int center_row,int center_col){
@@ -189,11 +151,11 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		/*m.syncCoordinates ();
+		//m.syncCoordinates ();
 		current_interval += Time.deltaTime;
 		if (current_interval > interval) {
 			current_interval = 0f;
 			//flipMap(1,1);
-		}*/
+		}
 	}
 }

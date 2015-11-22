@@ -55,7 +55,6 @@ public class TileControl : MonoBehaviour {
 				this.GetComponent<Renderer>().material.color=temp;
 				current_delay = 0f;
 				//Debug.Log (this.m);
-				this.m.registerBackgroundGameObject(gameObject);
 				state = STATE_IDLE;
 			}else{
 				var temp = this.GetComponent<Renderer>().material.color;

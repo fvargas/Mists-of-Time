@@ -51,7 +51,7 @@ public class Map {
 	};
 	
 	public int [,,] getMatrix(){
-		syncCoordinates ();
+		//syncCoordinates ();
 		return g;
 	}
 
@@ -60,12 +60,12 @@ public class Map {
 	}
 
 	public Map() {
-		//background_g = new int[nrows,ncols,nvers];
-		//g = new int[nrows,ncols,nvers];
-		//background_links = new GameObject[nrows,ncols,nvers];
-		//g_links = new GameObject[nrows,ncols,nvers];
+		background_g = new int[Level1.x,Level1.z,Level1.y];
+		g = new int[Level1.x,Level1.z,Level1.y];
+		background_links = new GameObject[Level1.x,Level1.z,Level1.y];
+		g_links = new GameObject[Level1.x,Level1.z,Level1.y];
 		game_objects = new LinkedList<GameObject> ();
-		/*for (int i=0; i<background_g.GetLength(0); i++) {
+		for (int i=0; i<background_g.GetLength(0); i++) {
 			for (int j=0; j<background_g.GetLength(1); j++) {
 				for (int k=0; k<background_g.GetLength(2); k++) {
 					background_g[i,j,k] = EMPTY;
@@ -74,7 +74,7 @@ public class Map {
 					g_links[i,j,k] = null;
 				}
 			}
-		}*/
+		}
 	}
 
 	public void render() {
@@ -144,25 +144,6 @@ public class Map {
 		return v;
 	}
 
-	public void fillGrid(GameObject go, int row,int ver,int col){
-		
-	}
-
-	private void fillGrid(GameObject go,int [,,] grid, GameObject [,,] link){
-		int go_type = TAG_TYPE_DICT[go.tag];
-		int row = (int)(go.transform.position.x / TILE_SIZE);
-		int ver = (int)(go.transform.position.y / TILE_SIZE);
-		int col = (int)(go.transform.position.z / TILE_SIZE);
-
-		if(row >=0 && ver >= 0 && col >= 0 && row < getNRows() && col < getNCols() && ver < getNVers()){
-			grid[row,ver,col] = go_type;
-			link[row,ver,col] = go;
-		}
-	}
-	public void registerBackgroundGameObject(GameObject go){
-		fillGrid (go, background_g,background_links);
-	}
-
 	public GameObject unRegisterBackgroundObject(int row,int ver,int col){
 		GameObject go = background_links [row, ver, col];
 		background_links [row, ver, col] = null;
@@ -213,7 +194,7 @@ public class Map {
 	 * Call this method before you access the grid to make sure its up-to-date
 	 * NOTICE: In order to sync game objects on the stage to Map instance, we need to tag the game objects to look up their type.
 	 */
-	public void syncCoordinates(){
+	/*public void syncCoordinates(){
 		for (int i=0; i<g.GetLength(0); i++) {
 			for (int j=0; j<g.GetLength(1); j++) {
 				for (int k=0; k<g.GetLength(2); k++) {
@@ -226,5 +207,5 @@ public class Map {
 			GameObject go = go_node.Value;
 			fillGrid(go,g,g_links);
 		}
-	}
+	}*/
 }
