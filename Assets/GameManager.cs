@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour {
 	public int total_flips = 4;
 	public int current_flips = 0;
 	public float flip_tile_interval = 0.05f;
+	private Text status_txt;
+	public float freeze_timer = 0f;
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
 		{ Map.EMPTY, 1 },
@@ -50,6 +52,9 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		m = new Map ();
 		m.render ();
+		//LoadScene (m);
+		status_txt = GameObject.Find ("Status_Text").GetComponent<Text> ();
+		status_txt.text = "HP:3";
 	}
 
 	public static void setMark(Vector3 r) {
@@ -57,17 +62,54 @@ public class GameManager : MonoBehaviour {
 		go.transform.position = r;
 	}
 
-	public void SwitchChasing(){
-		//Debug.Log ("COOOOL");
-		if (chasing_on) {
-			chasing_on = false;
-			GameObject.Find ("ChasingSwitch").GetComponent<Text>().text = "Chasing Off";
-		} else {
-			chasing_on = true;
-			GameObject.Find ("ChasingSwitch").GetComponent<Text>().text = "Chasing On";
-		}
 
+	public void freeze(float time_in_sec){
+		freeze_timer = time_in_sec;
 	}
+
+	public bool freezing(){
+		return freeze_timer > 0;
+	}
+
+	void LoadScene(Map m){
+		// Load background
+		GameObject [] gos = GameObject.FindGameObjectsWithTag ("GO_LAVA");
+		for (int i = 0; i<gos.GetLength(0); i++) {
+			//Debug.Log ("LAVA Found");
+			//m.registerBackgroundGameObject (gos [i]);
+		}
+		gos = GameObject.FindGameObjectsWithTag ("GO_ROCK");
+		for (int i = 0; i<gos.GetLength(0); i++) {
+			//m.registerBackgroundGameObject (gos [i]);
+		}
+		/*
+		gos = GameObject.FindGameObjectsWithTag ("GO_WATER");
+		for (int i = 0; i<gos.GetLength(0); i++) {
+			m.registerBackgroundGameObject (gos [i]);
+		}
+		gos = GameObject.FindGameObjectsWithTag ("GO_PATH");
+		for (int i = 0; i<gos.GetLength(0); i++) {
+			m.registerBackgroundGameObject (gos [i]);
+		}*/
+
+
+		//Load objects
+		/*
+		gos = GameObject.FindGameObjectsWithTag ("GO_OBSTACLE");
+		for (int i = 0; i<gos.GetLength(0); i++) {
+			m.registerBackgroundGameObject (gos [i]);
+		}
+		gos = GameObject.FindGameObjectsWithTag ("GO_TREE");
+		for (int i = 0; i<gos.GetLength(0); i++) {
+			m.registerBackgroundGameObject (gos [i]);
+		}
+		gos = GameObject.FindGameObjectsWithTag ("GO_LADDER");
+		for (int i = 0; i<gos.GetLength(0); i++) {
+			m.registerBackgroundGameObject (gos [i]);
+		}*/
+	}
+
+
 
 	public void SwitchCamera(){
 		if (camera_view == ISOMETRIC_VIEW) {
@@ -148,10 +190,13 @@ public class GameManager : MonoBehaviour {
 		return current_flips < total_flips;
 	}
 
-
 	// Update is called once per frame
 	void Update () {
 		//m.syncCoordinates ();
+
+
+		if(freeze_timer >0) freeze_timer -= Time.deltaTime;
+		if(freeze_timer<0) freeze_timer = 0f;
 		current_interval += Time.deltaTime;
 		if (current_interval > interval) {
 			current_interval = 0f;

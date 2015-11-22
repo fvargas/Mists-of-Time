@@ -12,9 +12,12 @@ public class Movement : MonoBehaviour
     private Vector3 wander_dest = new Vector3();
     public Quaternion target_rotation = Quaternion.AngleAxis(0, Vector3.left);
     public float max_speed = 4f;
+	public float maxJumpSpeed = 2.0F;
+	public float gravity = 40.0F;
     public float current_speed = 0.0f;
     public float follow_approach_time = 1f;
     private float current_acceleration;
+	private GameManager game_manager;
     private GroupManager gm;
     private Map m;
     public string enemyTag;
@@ -29,6 +32,20 @@ public class Movement : MonoBehaviour
 	public List<Vector3> pace_points;
 	public int pace_index = 0;
 
+	private Animator anim;
+	private float prev_anim_speed;
+	CharacterController controller;
+	public Vector3 moveDirection = Vector3.zero;
+	public float prev_y_velocity = 0f;
+	private int next_row;
+	private int next_col;
+
+	static int cute1State = Animator.StringToHash("Base Layer.Cute1");
+
+	public static int UP = 1;
+	public static int DOWN = 2;
+	public static int LEFT = 3;
+	public static int RIGHT = 4;
     // Use this for initialization
     void Start()
     {
@@ -40,92 +57,95 @@ public class Movement : MonoBehaviour
 		prev_target_loc = new Vector4 (tpos.x, tpos.y, tpos.z, 0);
 
         current_acceleration = max_speed;
-        	if (behav == "") {
-			behav = "Wander";
-		}
+
 		current_interval = 0f;
+        if (behav == "")
+        {
+            behav = "Wander";
+        }
+		game_manager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		gm = game_manager.gm;
+		m = game_manager.m;
+
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;
         wander_dest.z = transform.position.z;
         //Debug.Log(wander_dest);
 
-		gm = GameObject.Find("GameManager").GetComponent<GameManager>().gm;
-		//m = GameObject.Find("GameManager").GetComponent<GameManager>().m;
-
 		if (behav == "Chase") {
 			Plan (prev_target_loc);
 		}
+		anim = GetComponent<Animator>();
+		controller = GetComponent<CharacterController>();
+		prev_anim_speed = anim.speed;
+		next_row = Map.getRowNumber(this.transform.position.x);
+		next_col = Map.getColNumber(this.transform.position.z);
     }
 
     // Update is called once per frame
     void Update()
     {
-        var targetDirection = target_go.transform.position - this.transform.position;
+		if (game_manager.freezing()) {
+			//AnimatorStateInfo current_state = anim.GetCurrentAnimatorStateInfo(0);
+			if(anim.speed > 0){
+				prev_anim_speed = anim.speed;
+				anim.speed = 0;
+			}
+			return;
+		}
 
-        if (fleeing && (targetDirection.magnitude < 30.0f))
-        {
-            behav = "Flee";
-        }
-        else if (fleeing && (targetDirection.magnitude > 50.0f))
-        {
-            behav = "Wander";
-        }
+		if (anim.speed == 0) {
+			anim.speed = prev_anim_speed;
+		}
+		var targetDirection = target_go.transform.position - this.transform.position;
+		if (fleeing && (targetDirection.magnitude < 30.0f)) {
+			behav = "Flee";
+		} else if (fleeing && (targetDirection.magnitude > 50.0f)) {
+			behav = "Wander";
+		}
 
-        if (behav == "ReachGoal")
-        {
-            ReachGoal(target_go.transform.position);
-            //this.transform.position = Flee(target.transform.position);
+		if (behav == "ReachGoal") {
+			ReachGoal (target_go.transform.position);
+			//this.transform.position = Flee(target.transform.position);
 
-        }
-		else if (behav == "Wander") {
+		} else if (behav == "Wander") {
 			elapsed_time += Time.deltaTime;
 			if (elapsed_time > wander_interval) {
-				wander_dest = m.RandomPosition();
+				wander_dest = m.RandomPosition ();
 				Plan (wander_dest);
 				//transform.rotation *= Quaternion.Euler(0, Random.Range(-2,2), 0);
 				elapsed_time = 0.0f;
 			}
 			followPath ();
-		} 
-        else if (behav == "FlockingWander")
-        {
-            Vector3 expected_pos = gm.getPosition(this.gameObject);
-            ReachGoal(expected_pos, true);
-        }
-        else if (behav == "Flee")
-        {
-            this.transform.position = Flee(target_go.transform.position);
+		} else if (behav == "FlockingWander") {
+			Vector3 expected_pos = gm.getPosition (this.gameObject);
+			ReachGoal (expected_pos, true);
+		} else if (behav == "Flee") {
+			this.transform.position = Flee (target_go.transform.position);
 
-        }
-        else if (behav == "FleeGroup")
-        {
-            Vector3 averageDirection = Vector3.zero;
-            if (enemyTag == "")
-            {
-                enemyTag = "Cube";
-            }
-            var enemies = GameObject.FindGameObjectsWithTag(enemyTag);
-            Vector3 normalizedFlee = Vector3.zero;
-            foreach (var enemy in enemies)
-            {
-                normalizedFlee = (Flee(enemy.transform.position) - this.transform.position);
-                normalizedFlee.Normalize();
-                averageDirection += normalizedFlee;
-            }
-            var seek_rotation = Quaternion.LookRotation(averageDirection);
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, seek_rotation, Time.deltaTime * 0.02f);
-            //Debug.Log (this.transform.forward);
-            this.transform.position += -1 * this.transform.forward * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
-        }
-        else if (behav == "Chase")
-        {
+		} else if (behav == "FleeGroup") {
+			Vector3 averageDirection = Vector3.zero;
+			if (enemyTag == "") {
+				enemyTag = "Cube";
+			}
+			var enemies = GameObject.FindGameObjectsWithTag (enemyTag);
+			Vector3 normalizedFlee = Vector3.zero;
+			foreach (var enemy in enemies) {
+				normalizedFlee = (Flee (enemy.transform.position) - this.transform.position);
+				normalizedFlee.Normalize ();
+				averageDirection += normalizedFlee;
+			}
+			var seek_rotation = Quaternion.LookRotation (averageDirection);
+			this.transform.rotation = Quaternion.Slerp (this.transform.rotation, seek_rotation, Time.deltaTime * 0.02f);
+			//Debug.Log (this.transform.forward);
+			this.transform.position += -1 * this.transform.forward * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow (Time.deltaTime, 2));
+		} else if (behav == "Chase") {
 			current_interval += Time.deltaTime;
 			Vector3 tpos = target_go.transform.position;
 			Debug.Log (target_go);
 			Debug.Log(target_go.GetComponent<Movement>());
 			//*** Last argument should really be the current state of the target
 			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, 0);
-
 			if (Vector4.Distance(prev_target_loc, target_loc) > 2.0 && current_interval > interval) {
 				current_interval = 0f;
 				prev_target_loc = target_loc;
@@ -133,14 +153,31 @@ public class Movement : MonoBehaviour
 			}
 
 			followPath ();
-        }
-		else if (behav == "Pace") {
-			if(pace_points != null && pace_points.Count > 0){
-				Vector3 waypoint = pace_points[pace_index];
+		} else if (behav == "Pace") {
+			if (pace_points != null && pace_points.Count > 0) {
+				Vector3 waypoint = pace_points [pace_index];
 				if (ReachGoal (waypoint)) {
 					pace_index = (pace_index + 1) % pace_points.Count;
 				}
 			}
+		} else if (behav == "Jump") {
+			if(controller.isGrounded && !anim.GetBool("Jump")){
+				moveDirection = new Vector3(0, 0, 0);
+				this.transform.localPosition = new Vector3(Map.getXCoordinate(next_row),transform.localPosition.y,Map.getZCoordinate(next_col));
+			}else{
+				Vector3 future_pos = this.transform.position + moveDirection * Time.deltaTime;
+				if(future_pos.y > 0.5f){
+					this.transform.position = future_pos;
+				}
+
+				prev_y_velocity = moveDirection.y;
+				moveDirection.y -= gravity * Time.deltaTime;
+			}
+			if (anim.GetCurrentAnimatorStateInfo(0).nameHash == cute1State && !anim.IsInTransition(0))
+			{
+				anim.SetBool("Jump", false);
+			}
+
 		}
     }
 
@@ -160,6 +197,39 @@ public class Movement : MonoBehaviour
 	public void addPacePoint(Vector3 v) {
 		pace_points.Add (v);
 	}
+
+	public void jump(int direction){
+		int row = Map.getRowNumber(this.transform.position.x);
+		int col = Map.getColNumber(this.transform.position.z);
+		if (direction == UP)
+		{
+			this.transform.LookAt(this.transform.position + new Vector3(1, 0, 0));
+			next_row = row + 1;
+		}
+		if (direction == LEFT)
+		{
+			this.transform.LookAt(this.transform.position + new Vector3(0, 0, 1));
+			next_col = col + 1;
+		}
+		if (direction == DOWN)
+		{
+			this.transform.LookAt(this.transform.position + new Vector3(-1, 0, 0));
+			next_row = row - 1;
+		}
+		if (direction == RIGHT)
+		{
+			this.transform.LookAt(this.transform.position + new Vector3(0, 0, -1));
+			next_col = col - 1;
+		}
+
+		anim.SetBool("Jump",true);
+		moveDirection = new Vector3(0, 0, 1);
+		moveDirection = transform.TransformDirection(moveDirection);
+		moveDirection *= 2f;
+		moveDirection.y = maxJumpSpeed;
+	}
+
+
 
 
     bool ReachGoal(Vector3 destination, bool following = false)
