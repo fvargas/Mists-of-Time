@@ -65,7 +65,7 @@ public class Movement : MonoBehaviour
         }
 		game_manager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 		gm = game_manager.gm;
-		m = game_manager.m;
+		//m = game_manager.m;
 
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;

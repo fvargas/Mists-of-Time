@@ -19,7 +19,7 @@ public class PlayerControl : MonoBehaviour
 	GameManager gm;
 	Movement mv;
 
-	private Vector3 velocity = Vector3.zero;
+	public Vector3 velocity = Vector3.zero;
 	public int maxJumps = 2;
 	private int currentJumps = 0;
 	private bool is_jumping = false;
@@ -81,6 +81,7 @@ public class PlayerControl : MonoBehaviour
 			//Debug.Log(velocity.y);
 			if (controller.isGrounded)
 			{
+				Debug.Log ("Grounded");
 				velocity = Vector3.zero;
 				if (Input.GetKey(KeyCode.W))
 				{

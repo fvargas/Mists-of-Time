@@ -52,9 +52,8 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		m = new Map ();
 		m.render ();
-		//LoadScene (m);
-		status_txt = GameObject.Find ("Status_Text").GetComponent<Text> ();
-		status_txt.text = "HP:3";
+		//status_txt = GameObject.Find ("Status_Text").GetComponent<Text> ();
+		//status_txt.text = "HP:3";
 	}
 
 	public static void setMark(Vector3 r) {
@@ -70,46 +69,6 @@ public class GameManager : MonoBehaviour {
 	public bool freezing(){
 		return freeze_timer > 0;
 	}
-
-	void LoadScene(Map m){
-		// Load background
-		GameObject [] gos = GameObject.FindGameObjectsWithTag ("GO_LAVA");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			//Debug.Log ("LAVA Found");
-			//m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_ROCK");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			//m.registerBackgroundGameObject (gos [i]);
-		}
-		/*
-		gos = GameObject.FindGameObjectsWithTag ("GO_WATER");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_PATH");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}*/
-
-
-		//Load objects
-		/*
-		gos = GameObject.FindGameObjectsWithTag ("GO_OBSTACLE");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_TREE");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}
-		gos = GameObject.FindGameObjectsWithTag ("GO_LADDER");
-		for (int i = 0; i<gos.GetLength(0); i++) {
-			m.registerBackgroundGameObject (gos [i]);
-		}*/
-	}
-
-
 
 	public void SwitchCamera(){
 		if (camera_view == ISOMETRIC_VIEW) {
