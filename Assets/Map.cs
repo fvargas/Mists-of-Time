@@ -27,6 +27,7 @@ public class Map {
 	public static int GO_OBSTACLE = 6;
 	public static int GO_MUD = 7;
 	public static int GO_PATH = 8;
+
 	/**
 	 * Dictionary mapping Tag to GameObject type
 	 */
@@ -77,19 +78,25 @@ public class Map {
 	}
 
 	public void render() {
+		string defaultFloorTile = "InterBox";
+
 		int[][,,] level1 = Level1.getLevel ();
 		int[,,] state1 = level1 [0];
 		Debug.Log (state1.GetLength(0) + "   " + state1.GetLength(1) + "   " + state1.GetLength(2));
 
+		// Render the default floor
+		for (int x = 0; x < Level1.x; x++) {
+			for (int z = 0; z < Level1.z; z++) {
+				renderGameObject (new Vector3 (x, -1, z), defaultFloorTile);
+			}
+		}
+
 		for (int y = 0; y < state1.GetLength(0); y++) {
 			for (int z = 0; z < state1.GetLength(1); z++) {
 				for (int x = 0; x < state1.GetLength(2); x++) {
-					if (y == 0) {
-						renderGameObject(new Vector3(x, y, z), "InterBox");
-					}
 					string resource = Level1.tileMapping[state1[y, z, x]];
 					if (resource != "EMPTY") {
-						renderGameObject(new Vector3(x, y + 0.5f, z), resource);
+						renderGameObject(new Vector3(x, y, z), resource);
 					}
 				}
 			}

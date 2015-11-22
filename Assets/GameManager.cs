@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
 	public static int ISOMETRIC_VIEW = 1;
 	public static int THIRD_PERSON_VIEW = 2;
 	public static int camera_view = ISOMETRIC_VIEW;//1 - Isometric; 2 - Third Person
-	public Map m = new Map ();
+	public Map m;
     public Button button;
 	public GameObject [] cameras;
     public bool beforeGame = true;
@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour {
 	};
 	// Use this for initialization
 	void Start () {
+		m = new Map ();
 		m.render ();
 	}
 

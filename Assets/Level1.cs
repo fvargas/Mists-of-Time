@@ -2,10 +2,16 @@ using System.Collections.Generic;
 
 class Level1
 {
+	public static readonly int x = 20;
+
+	public static readonly int y = 3;
+
+	public static readonly int z = 20;
+
 	public static readonly Dictionary<int, string> tileMapping = new Dictionary<int, string>
 	{
 		{ 0, "EMPTY" },
-		{ 1, "crystalC" },
+		{ 1, "GrassBox" },
 		{ 2, "EMPTY"  },
 	};
 
@@ -15,6 +21,7 @@ class Level1
 		int[,,] state1 = getState1 ();
 		int[,,] state2 = getState2 ();
 		int[,,] state3 = getState3 ();
+
 		return new int[][,,] { state1, state2, state3 };
 	}
 
