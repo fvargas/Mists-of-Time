@@ -23,9 +23,9 @@ public class GameManager : MonoBehaviour {
 	public float flip_tile_interval = 0.05f;
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
-		{ Map.EMPTY, -1 },
-		{ Map.GO_LAVA, 3 },
-		{ Map.GO_ROCK, -1 },
+		{ Map.EMPTY, 1 },
+		{ Map.GO_LAVA, -1 },
+		{ Map.GO_ROCK, 1 },
 		{ Map.GO_DEST, 1 },
 		{ Map.GO_SAFE, -1 },
 		{ Map.GO_LADDER, 2 },
@@ -36,14 +36,14 @@ public class GameManager : MonoBehaviour {
 
 	public static Dictionary<int, int> dragonGridValueMap = new Dictionary<int, int>
 	{
-		{ Map.EMPTY, -1 },
-		{ Map.GO_LAVA, 256 },
-		{ Map.GO_ROCK, -1 },
+		{ Map.EMPTY, 1 },
+		{ Map.GO_LAVA, -1 },
+		{ Map.GO_ROCK, 1 },
 		{ Map.GO_DEST, 1 },
 		{ Map.GO_SAFE, -1 },
 		{ Map.GO_LADDER, 2 },
 		{ Map.GO_OBSTACLE, -1 },
-		{ Map.GO_MUD, 4 },
+		{ Map.GO_MUD, 256 },
 		{ Map.GO_PATH, 1 },
 	};
 	// Use this for initialization
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	private void flipTile(int row,int ver,int col,int new_tile_type,float interval){
+	/*private void flipTile(int row,int ver,int col,int new_tile_type,float interval){
 		GameObject old_go = m.unRegisterBackgroundObject (row, ver, col);
 		float below_y = (float)(Map.getYCoordinate (ver) - 0.5 * Map.TILE_SIZE);
 		if(old_go != null) old_go.GetComponent<TileControl> ().destroy (interval,below_y);
@@ -94,9 +94,9 @@ public class GameManager : MonoBehaviour {
 		new_go.transform.position = new Vector3(Map.getXCoordinate(row),below_y,Map.getZCoordinate(col));
 		new_go.GetComponent<TileControl> ().born (interval,Map.getYCoordinate (ver),m);
 		//m.registerBackgroundGameObject (new_go);
-	}
+	}*/
 
-	public void flipMap(int center_row,int center_col){
+	/*public void flipMap(int center_row,int center_col){
 		for (int row=0; row<m.getNRows(); row++) {
 			for (int ver=0; ver<m.getNVers(); ver++) {
 				for (int col=0; col<m.getNCols(); col++) {
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		current_flips += 1;
-	}
+	}*/
 
     public void ChangeGame()
     {

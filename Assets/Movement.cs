@@ -21,7 +21,7 @@ public class Movement : MonoBehaviour
     public bool fleeing = false;
 
     public List<Vector3> target_path;
-	Vector3 prev_target_loc;
+	private Vector3 prev_target_loc;
 	public float interval;
 	private float current_interval = 0f;
 
@@ -31,20 +31,25 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		m = new Map (); // Yes, this is kind of a problem
 		target = GameObject.Find ("magic_archer");
+		prev_target_loc = target.transform.position;
         current_acceleration = max_speed;
-        if (behav == "")
-        {
-            behav = "Wander";
-        }
-        gm = GameObject.Find("GameManager").GetComponent<GameManager>().gm;
-        m = GameObject.Find("GameManager").GetComponent<GameManager>().m;
+        	if (behav == "") {
+			behav = "Wander";
+		}
+		current_interval = 0f;
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;
         wander_dest.z = transform.position.z;
         //Debug.Log(wander_dest);
 
-		current_interval = 0f;
+		gm = GameObject.Find("GameManager").GetComponent<GameManager>().gm;
+		//m = GameObject.Find("GameManager").GetComponent<GameManager>().m;
+
+		if (behav == "Chase") {
+			Plan (target.transform.position);
+		}
     }
 
     // Update is called once per frame
@@ -134,6 +139,7 @@ public class Movement : MonoBehaviour
 		if (!GameManager.chasing_on) {
 			return;
 		}
+
 		if (target_path != null && target_path.Count > 0) {
 			Vector3 waypoint = Map.getCoordinates (target_path [0]);
 			if (ReachGoal (waypoint)) {
@@ -160,7 +166,7 @@ public class Movement : MonoBehaviour
         int row = Map.getRowNumber(this.transform.position.x);
         int ver = Map.getVerNumber(this.transform.position.y);
         int col = Map.getColNumber(this.transform.position.z);
-        var atLadder = grid[row, ver, col] == Map.GO_LADDER;
+        var atLadder = m.getGridValue(row, ver, col] == Map.GO_LADDER;
         var objBounds = GetComponent<MeshRenderer>().bounds;
 
         var movingVert = (destination.y > this.transform.position.y + 0.3f) || (destination.y < this.transform.position.y - 0.3f);
@@ -362,7 +368,6 @@ public class Movement : MonoBehaviour
 
 	public void Plan (Vector3 target)
 	{
-		int[,,] grid = m.getMatrix();
 		PQ pq = new PQ();
 		HashSet<Vector3> visited = new HashSet<Vector3>();
 		int target_x = Map.getRowNumber(target.x);
@@ -372,10 +377,10 @@ public class Movement : MonoBehaviour
 		int start_y = Map.getVerNumber(this.transform.position.y);
 		int start_z = Map.getColNumber(this.transform.position.z);
 		
-		int md = Node.manhattanDistance(start_x, start_y, start_z, target_x, target_y, target_z);
+		float md = Node.euclideanDistance(start_x, start_y, start_z, target_x, target_y, target_z);
 		Node init = new Node(start_x, start_y, start_z, 0, md, new List<Vector3>());
 		pq.insert(init);
-		
+
 		while (!pq.isEmpty())
 		{
 			Node n = pq.pop();
@@ -386,11 +391,11 @@ public class Movement : MonoBehaviour
 				DrawPath();
 				return;
 			}
-			
-			bool atLadder = grid[n.x, n.y, n.z] == Map.GO_LADDER;
+
+			bool atLadder = m.getGridValue(n.x, n.y, n.z) == Map.GO_LADDER;
 			
 			// Set of actions for 6-way connected grid
-			if (isValid(n.x - 1, n.y, n.z, visited, grid))
+			if (isValid(n.x - 1, n.y, n.z, visited))
 			{
 				float h = Node.euclideanDistance(n.x - 1, n.y, n.z, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -398,14 +403,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x - 1, n.y, n.z]];
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x - 1, n.y, n.z)];
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x - 1, n.y, n.z]];
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x - 1, n.y, n.z)];
 				}
 				Node newNode = new Node(n.x - 1, n.y, n.z, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (isValid(n.x + 1, n.y, n.z, visited, grid))
+			if (isValid(n.x + 1, n.y, n.z, visited))
 			{
 				float h = Node.euclideanDistance(n.x + 1, n.y, n.z, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -413,14 +418,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x + 1, n.y, n.z]];
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x + 1, n.y, n.z)];
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x + 1, n.y, n.z]];
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x + 1, n.y, n.z)];
 				}
 				Node newNode = new Node(n.x + 1, n.y, n.z, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (atLadder && isValid(n.x, n.y - 1, n.z, visited, grid))
+			if (atLadder && isValid(n.x, n.y - 1, n.z, visited))
 			{
 				float h = Node.euclideanDistance(n.x, n.y - 1, n.z, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -428,14 +433,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x, n.y - 1, n.z]];
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x, n.y - 1, n.z)];
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x, n.y - 1, n.z]];
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x, n.y - 1, n.z)];
 				}
 				Node newNode = new Node(n.x, n.y - 1, n.z, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (atLadder && isValid(n.x, n.y + 1, n.z, visited, grid))
+			if (atLadder && isValid(n.x, n.y + 1, n.z, visited))
 			{
 				float h = Node.euclideanDistance(n.x, n.y + 1, n.z, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -443,14 +448,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x, n.y + 1, n.z]];
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x, n.y + 1, n.z)];
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x, n.y + 1, n.z]];
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x, n.y + 1, n.z)];
 				}
 				Node newNode = new Node(n.x, n.y + 1, n.z, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (isValid(n.x, n.y, n.z - 1, visited, grid))
+			if (isValid(n.x, n.y, n.z - 1, visited))
 			{
 				float h = Node.euclideanDistance(n.x, n.y, n.z - 1, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -458,14 +463,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x, n.y, n.z - 1]];
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x, n.y, n.z - 1)];
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x, n.y, n.z - 1]];
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x, n.y, n.z - 1)];
 				}
 				Node newNode = new Node(n.x, n.y, n.z - 1, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (isValid(n.x, n.y, n.z + 1, visited, grid))
+			if (isValid(n.x, n.y, n.z + 1, visited))
 			{
 				float h = Node.euclideanDistance(n.x, n.y, n.z + 1, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -473,16 +478,16 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x, n.y, n.z + 1]];
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x, n.y, n.z + 1)];
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x, n.y, n.z + 1]];
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x, n.y, n.z + 1)];
 				}
 				Node newNode = new Node(n.x, n.y, n.z + 1, cost, h, newPath);
 				pq.insert(newNode);
 			}
 			
 			// Additional set of actions for 10-way connected grid
-			if (isValid(n.x - 1, n.y, n.z - 1, visited, grid))
+			if (isValid(n.x - 1, n.y, n.z - 1, visited))
 			{
 				float h = Node.euclideanDistance(n.x - 1, n.y, n.z - 1, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -490,14 +495,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x - 1, n.y, n.z - 1]] * 1.4f;
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x - 1, n.y, n.z - 1)] * 1.4f;
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x - 1, n.y, n.z - 1]] * 1.4f;
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x - 1, n.y, n.z - 1)] * 1.4f;
 				}
 				Node newNode = new Node(n.x - 1, n.y, n.z - 1, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (isValid(n.x - 1, n.y, n.z + 1, visited, grid))
+			if (isValid(n.x - 1, n.y, n.z + 1, visited))
 			{
 				float h = Node.euclideanDistance(n.x - 1, n.y, n.z + 1, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -505,14 +510,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x - 1, n.y, n.z + 1]] * 1.4f;
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x - 1, n.y, n.z + 1)] * 1.4f;
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x - 1, n.y, n.z + 1]] * 1.4f;
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x - 1, n.y, n.z + 1)] * 1.4f;
 				}
 				Node newNode = new Node(n.x - 1, n.y, n.z + 1, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (isValid(n.x + 1, n.y, n.z - 1, visited, grid))
+			if (isValid(n.x + 1, n.y, n.z - 1, visited))
 			{
 				float h = Node.euclideanDistance(n.x + 1, n.y, n.z - 1, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -520,14 +525,14 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x + 1, n.y, n.z - 1]] * 1.4f;
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x + 1, n.y, n.z - 1)] * 1.4f;
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x + 1, n.y, n.z - 1]] * 1.4f;
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x + 1, n.y, n.z - 1)] * 1.4f;
 				}
 				Node newNode = new Node(n.x + 1, n.y, n.z - 1, cost, h, newPath);
 				pq.insert(newNode);
 			}
-			if (isValid(n.x + 1, n.y, n.z + 1, visited, grid))
+			if (isValid(n.x + 1, n.y, n.z + 1, visited))
 			{
 				float h = Node.euclideanDistance(n.x + 1, n.y, n.z + 1, target_x, target_y, target_z);
 				List<Vector3> newPath = new List<Vector3>(n.path);
@@ -535,15 +540,15 @@ public class Movement : MonoBehaviour
 				
 				float cost;
 				if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[grid[n.x + 1, n.y, n.z + 1]] * 1.4f;
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.x + 1, n.y, n.z + 1)] * 1.4f;
 				} else {
-					cost = n.g + GameManager.gridValueMap[grid[n.x + 1, n.y, n.z + 1]] * 1.4f;
+					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.x + 1, n.y, n.z + 1)] * 1.4f;
 				}
 				Node newNode = new Node(n.x + 1, n.y, n.z + 1, cost, h, newPath);
 				pq.insert(newNode);
 			}
 		}
-		
+
 		DrawPath();
 	}
 
@@ -559,7 +564,7 @@ public class Movement : MonoBehaviour
 		Debug.Log ("Just Planned");*/
 	}
 	
-	private bool isValid(int x, int y, int z, HashSet<Vector3> visited, int[, ,] grid)
+	private bool isValid(int x, int y, int z, HashSet<Vector3> visited)
 	{
 		int numRows = m.getNRows();
 		int numCols = m.getNCols();
@@ -567,7 +572,9 @@ public class Movement : MonoBehaviour
 		
 		bool squareInBounds = 0 <= x && x < numRows && 0 <= y && y < numVers && 0 <= z && z < numCols;
 		bool haveVisited = visited.Contains(new Vector3(x, y, z));
-		return squareInBounds && !haveVisited && GameManager.gridValueMap[grid[x, y, z]] >= 0;
+		bool ret = squareInBounds && !haveVisited && GameManager.gridValueMap[m.getGridValue(x, y, z)] >= 0;
+
+		return ret;
 	}
 	
 	private class Node

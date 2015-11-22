@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Map {
-	public int[,,] background_g;
-	public GameObject[,,] background_links;
-	public int [,,] g;
-	public GameObject[,,] g_links;
+	private int [,,] grid;
 	public static float TILE_SIZE = 1f;
+	private readonly string DEFAULT_FLOOR_TILE = "InterBox";
 
 	/**
 	 * List of game objects on this map
@@ -28,73 +26,43 @@ public class Map {
 	public static int GO_MUD = 7;
 	public static int GO_PATH = 8;
 
-	/**
-	 * Dictionary mapping Tag to GameObject type
-	 */
-	public static readonly Dictionary<string, int> TAG_TYPE_DICT = new Dictionary<string, int>
-	{
-		{ "GO_LAVA", GO_LAVA },
-		{"GO_ROCK", GO_ROCK },
-		{"GO_DEST", GO_DEST },
-		{"GO_SAFE", GO_SAFE },
-		{"GO_LADDER", GO_LADDER },
-		{"GO_OBSTACLE", GO_OBSTACLE },
-		{"GO_MUD", GO_MUD },
-		{"GO_PATH", GO_PATH },
-	};
-
 	public static readonly Dictionary<int, string> TYPE_RESOURCE_DICT = new Dictionary<int, string>
 	{
 		{ GO_LAVA,"LavaBox" },
 		{ GO_ROCK,"InterBox" },
 		{ GO_DEST,"SafeBox" },
 	};
+
+	public Map() {
+		grid = Level1.getLevel () [0];
+		game_objects = new LinkedList<GameObject> ();
+	}
 	
 	public int [,,] getMatrix(){
 		//syncCoordinates ();
-		return g;
+		return grid;
+	}
+
+	public int getGridValue(int x, int y, int z) {
+		return grid [y, x, z];
 	}
 
 	public static string getTagFromType(int type){
 		return TYPE_RESOURCE_DICT[type];
 	}
 
-	public Map() {
-		background_g = new int[Level1.x,Level1.z,Level1.y];
-		g = Level1.getLevel () [0];//new int[Level1.x,Level1.z,Level1.y];
-		background_links = new GameObject[Level1.x,Level1.z,Level1.y];
-		g_links = new GameObject[Level1.x,Level1.z,Level1.y];
-		game_objects = new LinkedList<GameObject> ();
-		for (int i=0; i<background_g.GetLength(0); i++) {
-			for (int j=0; j<background_g.GetLength(1); j++) {
-				for (int k=0; k<background_g.GetLength(2); k++) {
-					background_g[i,j,k] = EMPTY;
-					//g[i,j,k] = EMPTY;
-					background_links[i,j,k] = null;
-					g_links[i,j,k] = null;
-				}
-			}
-		}
-	}
-
 	public void render() {
-		string defaultFloorTile = "InterBox";
-
-		int[][,,] level1 = Level1.getLevel ();
-		int[,,] state1 = level1 [0];
-		Debug.Log (state1.GetLength(0) + "   " + state1.GetLength(1) + "   " + state1.GetLength(2));
-
 		// Render the default floor
-		for (int x = 0; x < Level1.x; x++) {
-			for (int z = 0; z < Level1.z; z++) {
-				renderGameObject (new Vector3 (x, -1, z), defaultFloorTile);
+		for (int x = 0; x < grid.GetLength(1); x++) {
+			for (int z = 0; z < grid.GetLength(2); z++) {
+				renderGameObject (new Vector3 (x, -1, z), DEFAULT_FLOOR_TILE);
 			}
 		}
 
-		for (int y = 0; y < state1.GetLength(0); y++) {
-			for (int z = 0; z < state1.GetLength(1); z++) {
-				for (int x = 0; x < state1.GetLength(2); x++) {
-					string resource = Level1.tileMapping[state1[y, z, x]];
+		for (int y = 0; y < grid.GetLength(0); y++) {
+			for (int x = 0; x < grid.GetLength(1); x++) {
+				for (int z = 0; z < grid.GetLength(2); z++) {
+					string resource = Level1.tileMapping[grid[y, x, z]];
 					if (resource != "EMPTY") {
 						renderGameObject(new Vector3(x, y, z), resource);
 					}
@@ -110,16 +78,16 @@ public class Map {
 		}
 	}
 
-	public int getNRows(){
-		return g.GetLength(0);
+	public int getNRows() {
+		return grid.GetLength(1);
 	}
 
-	public int getNVers(){
-		return g.GetLength(1);
+	public int getNVers() {
+		return grid.GetLength(0);
 	}
 
-	public int getNCols(){
-		return g.GetLength(2);
+	public int getNCols() {
+		return grid.GetLength(2);
 	}
 
 	public int getHorizontalSize(){
@@ -127,11 +95,11 @@ public class Map {
 	}
 
 	public bool IsOnMap(int row,int ver, int col){
-		return row >= 0 && row < getNRows () && ver >= 0 && ver < getNVers () && col >= 0 && col < getNCols () && g [row, ver, col] != EMPTY;
+		return row >= 0 && row < getNRows () && ver >= 0 && ver < getNVers () && col >= 0 && col < getNCols () && grid [row, ver, col] != EMPTY;
 	}
 
 	public bool Reachable(int row,int ver, int col){
-		return IsOnMap(row,ver,col) && g[row,ver,col] != -1;
+		return IsOnMap(row,ver,col) && grid[row,ver,col] != -1;
 	}
 
 	public Vector3 RandomPosition(){
@@ -147,25 +115,25 @@ public class Map {
 		return v;
 	}
 
-	public GameObject unRegisterBackgroundObject(int row,int ver,int col){
+	/*public GameObject unRegisterBackgroundObject(int row,int ver,int col){
 		GameObject go = background_links [row, ver, col];
 		background_links [row, ver, col] = null;
 		return go;
-	}
+	}*/
 
 	public void registerGameObject(GameObject go){
 		game_objects.AddLast (go);
 	}
 
-	public static int getRowNumber(float x){
+	public static int getRowNumber(float x) {
 		return (int)Mathf.Round(x / TILE_SIZE);
 	}
 
-	public static int getVerNumber(float y){
+	public static int getVerNumber(float y) {
 		return (int)Mathf.Round(y / TILE_SIZE);
 	}
 
-	public static int getColNumber(float z){
+	public static int getColNumber(float z) {
 		return (int)Mathf.Round(z / TILE_SIZE);
 	}
 
@@ -182,7 +150,7 @@ public class Map {
 	}
 
 	public int getTileTypeAtCoordinates(Vector3 v){
-		return g[Map.getColNumber(v.x),Map.getVerNumber(v.y),Map.getColNumber(v.z)];
+		return grid[Map.getColNumber(v.x),Map.getVerNumber(v.y),Map.getColNumber(v.z)];
 	}
 
 	public static Vector3 getCoordinates(Vector3 v){
@@ -190,7 +158,7 @@ public class Map {
 	}
 
 	public static bool areFlippableTiles(int src,int dst){
-		return (src == GO_ROCK&&dst==GO_LAVA);
+		return (src == GO_ROCK && dst==GO_LAVA);
 	}
 
 	/**

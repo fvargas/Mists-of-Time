@@ -39,6 +39,7 @@ public class PlayerControl : MonoBehaviour
 		{
 			CharacterController controller = GetComponent<CharacterController>();
 			m = gm.m;
+			int [,,] matrix = m.getMatrix();
 			//Debug.Log("x "+this.transform.position.x+" z "+this.transform.position.z);
 			if(controller.isGrounded){
 				moveDirection = new Vector3(0, 0, 0);
@@ -52,12 +53,12 @@ public class PlayerControl : MonoBehaviour
 				int col = Map.getColNumber(this.transform.position.z);
 				//this.transform.localPosition = new Vector3(Map.getXCoordinate(row),transform.localPosition.y,Map.getZCoordinate(col));
 				//Debug.Log("x "+this.transform.position.x+", row "+row+"z "+this.transform.position.z+", col "+col);
-				if (m.g[row, ver, col] == Map.GO_LAVA)
+				if (matrix[row, ver, col] == Map.GO_LAVA)
 				{
 					currentJumps = 0;
 					//respawn();
 				}
-				if (m.g[row, ver, col] == Map.GO_DEST)
+				if (matrix[row, ver, col] == Map.GO_DEST)
 				{
 					Debug.Log("You Win.");
 					currentJumps = 0;
@@ -71,7 +72,7 @@ public class PlayerControl : MonoBehaviour
 					this.transform.LookAt(this.transform.position + new Vector3(1, 0, 0));
 					int next_col = col + 1;
 					if(next_col < m.getNCols()){
-						if(Map.areFlippableTiles(m.g[row,ver,col],m.g[row,ver,next_col])){
+						if(Map.areFlippableTiles(matrix[row,ver,col],matrix[row,ver,next_col])){
 							flip_map = true;
 						}
 					}
@@ -82,7 +83,7 @@ public class PlayerControl : MonoBehaviour
 					this.transform.LookAt(this.transform.position + new Vector3(0, 0, 1));
 					int next_row = row - 1;
 					if(next_row >= 0){
-						if(Map.areFlippableTiles(m.g[row,ver,col],m.g[next_row,ver,col])){
+						if(Map.areFlippableTiles(matrix[row,ver,col],matrix[next_row,ver,col])){
 							flip_map = true;
 						}
 					}
@@ -92,7 +93,7 @@ public class PlayerControl : MonoBehaviour
 					this.transform.LookAt(this.transform.position + new Vector3(-1, 0, 0));
 					int next_col = col - 1;
 					if(next_col >= 0){
-						if(Map.areFlippableTiles(m.g[row,ver,col],m.g[row,ver,next_col])){
+						if(Map.areFlippableTiles(matrix[row,ver,col],matrix[row,ver,next_col])){
 							flip_map = true;
 						}
 					}
@@ -103,7 +104,7 @@ public class PlayerControl : MonoBehaviour
 					this.transform.LookAt(this.transform.position + new Vector3(0, 0, -1));
 					int next_row = row + 1;
 					if(next_row < m.getNRows()){
-						if(Map.areFlippableTiles(m.g[row,ver,col],m.g[next_row,ver,col])){
+						if(Map.areFlippableTiles(matrix[row,ver,col],matrix[next_row,ver,col])){
 							flip_map = true;
 						}
 					}
@@ -130,7 +131,7 @@ public class PlayerControl : MonoBehaviour
 					flip_map = false;
 					int row = Map.getRowNumber(this.transform.position.x);
 					int col = Map.getColNumber(this.transform.position.z);
-					gm.flipMap(row,col);
+					//gm.flipMap(row,col);
 				}
 			}
 
