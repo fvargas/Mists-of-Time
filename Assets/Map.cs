@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Map {
+	private int[][,,] level;
 	private int [,,] grid;
 	public static float TILE_SIZE = 1f;
 	private readonly string DEFAULT_FLOOR_TILE = "InterBox";
@@ -34,8 +35,13 @@ public class Map {
 	};
 
 	public Map() {
+		level = Level1.getLevel ();
 		grid = Level1.getLevel () [0];
 		game_objects = new LinkedList<GameObject> ();
+	}
+
+	public int[][,,] getLevel() {
+		return level;
 	}
 	
 	public int [,,] getMatrix(){
@@ -43,8 +49,8 @@ public class Map {
 		return grid;
 	}
 
-	public int getGridValue(int x, int y, int z) {
-		return grid [y, x, z];
+	public int getGridValue(int w, int x, int y, int z) {
+		return level [w][y, x, z];
 	}
 
 	public static string getTagFromType(int type){
@@ -88,6 +94,10 @@ public class Map {
 
 	public int getNCols() {
 		return grid.GetLength(2);
+	}
+
+	public int getNLevels() {
+		return level.Length;
 	}
 
 	public int getHorizontalSize(){
@@ -153,8 +163,8 @@ public class Map {
 		return grid[Map.getColNumber(v.x),Map.getVerNumber(v.y),Map.getColNumber(v.z)];
 	}
 
-	public static Vector3 getCoordinates(Vector3 v){
-		return new Vector3 (getXCoordinate((int)v.x),getYCoordinate((int)v.y),getZCoordinate((int)v.z));
+	public static Vector4 getCoordinates(Vector4 v){
+		return new Vector4 (getXCoordinate((int)v.x),getYCoordinate((int)v.y),getZCoordinate((int)v.z), v.w);
 	}
 
 	public static bool areFlippableTiles(int src,int dst){
