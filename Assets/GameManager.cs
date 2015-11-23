@@ -16,14 +16,14 @@ public class GameManager : MonoBehaviour {
     public bool beforeGame = true;
     public bool duringGame = false;
     public bool afterGame = false;
-	public float interval = 1f;
+	public float interval = 10f;
 	public float current_interval = 0f;
 	public int total_flips = 4;
 	public int current_flips = 0;
-	public float flip_tile_interval = 0.05f;
+	public float flip_map_interval = 0.5f;
 	private Text status_txt;
 	public float freeze_timer = 0f;
-	public int player_state = 0;
+	Movement player_movement;
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
 		{ Map.EMPTY, 1 },
@@ -51,10 +51,24 @@ public class GameManager : MonoBehaviour {
 	};
 	// Use this for initialization
 	void Start () {
+		player_movement = GameObject.Find ("player").GetComponent<Movement>();
+		//Debug.Log (GameObject.Find ("magic_archer"));
+		//Debug.Log (player_movement);
+		/*Component [] comps = GameObject.Find ("mon05 (2)").GetComponents(typeof(Component));
+		for (int i = 0; i<comps.GetLength(0); i++) {
+			Debug.Log (comps[i]);
+		}
+		*/
+
 		m = new Map ();
 		m.render ();
+
 		//status_txt = GameObject.Find ("Status_Text").GetComponent<Text> ();
 		//status_txt.text = "HP:3";
+	}
+
+	public int getPlayerState(){
+		return player_movement.current_state;
 	}
 
 	public static void setMark(Vector3 r) {
@@ -88,31 +102,51 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	/*private void flipTile(int row,int ver,int col,int new_tile_type,float interval){
-		GameObject old_go = m.unRegisterBackgroundObject (row, ver, col);
+	public bool switchable(int ver,int row,int col){
+		int player_state = getPlayerState ();
+		int next_player_state = (player_state + 1) % 3;
+		int [,,] next_grid = m.getLevel () [next_player_state];
+		if (next_grid [ver, row, col] == 1) {
+			//TODO: replace hardcoded 1
+			return false;
+		}
+		return true;
+	}
+
+	private void flipTile(int ver,int row,int col,int new_tile_type,float interval){
+		GameObject old_go = m.unRegisterGridGameObject (ver, row, col);
 		float below_y = (float)(Map.getYCoordinate (ver) - 0.5 * Map.TILE_SIZE);
 		if(old_go != null) old_go.GetComponent<TileControl> ().destroy (interval,below_y);
-		GameObject new_go = Instantiate(Resources.Load(Map.TYPE_RESOURCE_DICT[new_tile_type]) as GameObject);
-		new_go.transform.position = new Vector3(Map.getXCoordinate(row),below_y,Map.getZCoordinate(col));
-		new_go.GetComponent<TileControl> ().born (interval,Map.getYCoordinate (ver),m);
-		//m.registerBackgroundGameObject (new_go);
-	}*/
+		if (new_tile_type != Map.EMPTY) {
+			if(Level1.tileMapping [new_tile_type].Equals("EMPTY")) return;
+			//Debug.Log (new_tile_type);
+			//Debug.Log (Level1.tileMapping [new_tile_type]);
+			GameObject new_go = Instantiate (Resources.Load (Level1.tileMapping [new_tile_type]) as GameObject);
+			new_go.transform.position = new Vector3 (Map.getXCoordinate (row), below_y, Map.getZCoordinate (col));
+			new_go.GetComponent<TileControl> ().born (interval, Map.getYCoordinate (ver), m);
+			m.registerGridGameObject (new_go);
+		}
+	}
 
-	/*public void flipMap(int center_row,int center_col){
+	public void switchState(int center_row,int center_col){
+		int player_state = getPlayerState();
+		int next_player_state = (player_state + 1) % 3;
+		int [,,] current_grid = m.getLevel () [player_state];
+		int [,,] next_grid = m.getLevel () [next_player_state];
+		float flip_tile_interval = flip_map_interval / (m.getNRows () + m.getNCols ());
 		for (int row=0; row<m.getNRows(); row++) {
 			for (int ver=0; ver<m.getNVers(); ver++) {
 				for (int col=0; col<m.getNCols(); col++) {
-					if(m.g[row,ver,col] == Map.GO_ROCK){
-						flipTile(row,ver,col,Map.GO_LAVA,(Mathf.Abs (row-center_row)+Mathf.Abs(col-center_col))*flip_tile_interval);
-					}else if(m.g[row,ver,col] == Map.GO_LAVA){
-						flipTile(row,ver,col,Map.GO_ROCK,(Mathf.Abs (row-center_row)+Mathf.Abs(col-center_col))*flip_tile_interval);
+					//Debug.Log (row+" "+ver+" "+col);
+					if(current_grid[ver,row,col] != next_grid[ver,row,col]){
+						flipTile(ver,row,col,next_grid[ver,row,col],(Mathf.Abs (row-center_row)+Mathf.Abs(col-center_col))*flip_tile_interval);
 					}
-
 				}
 			}
 		}
 		current_flips += 1;
-	}*/
+		player_movement.current_state = next_player_state;
+	}
 
     public void ChangeGame()
     {
@@ -122,9 +156,9 @@ public class GameManager : MonoBehaviour {
             beforeGame = false;
             duringGame = true;
             afterGame = false;
-            Debug.Log(duringGame);
+            //Debug.Log(duringGame);
             button.GetComponentInChildren<Text>().text = "Remaining Jumps:";
-            Debug.Log(duringGame);
+            //Debug.Log(duringGame);
         }
         if (afterGame)
         {
@@ -152,15 +186,14 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		//m.syncCoordinates ();
-
+		//m.syncCoordinates (); 
 
 		if(freeze_timer >0) freeze_timer -= Time.deltaTime;
 		if(freeze_timer<0) freeze_timer = 0f;
 		current_interval += Time.deltaTime;
 		if (current_interval > interval) {
 			current_interval = 0f;
-			//flipMap(1,1);
+			//switchState(1,1);
 		}
 	}
 }

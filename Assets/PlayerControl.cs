@@ -41,7 +41,7 @@ public class PlayerControl : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (gm.duringGame)
+		if (gm.duringGame && !gm.freezing())
 		{
 
 			if (!Input.anyKey)
@@ -72,6 +72,7 @@ public class PlayerControl : MonoBehaviour
 			//{
 			//jump_speed = 0;
 			//}
+			//Debug.Log("Grounded: "+controller.isGrounded);
 			if (controller.isGrounded)
 			{
 				//jump_speed = 0;
@@ -86,36 +87,44 @@ public class PlayerControl : MonoBehaviour
 				{
 					this.transform.LookAt(this.transform.position + new Vector3(1, 0, 0));
 
-					velocity += (-this.transform.right * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
+
 
 				}
 				else if (Input.GetKey(KeyCode.A))
 				{
 					this.transform.LookAt(this.transform.position + new Vector3(0, 0, 1));
 
-					velocity += (-this.transform.right * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
+
 
 				}
 				else if (Input.GetKey(KeyCode.S))
 				{
 					this.transform.LookAt(this.transform.position + new Vector3(-1, 0, 0));
-
-					velocity += (-this.transform.right * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
 				}
 				else if (Input.GetKey(KeyCode.D))
 				{
 					this.transform.LookAt(this.transform.position + new Vector3(0, 0, -1));
-
-					velocity += (-this.transform.right * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
-
 				}
+				if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)){
+					velocity += (this.transform.forward * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
+				}
+
 			}
 			
 			if (Input.GetKey(KeyCode.Space))
 			{
 
+				gm.freeze(1f);
+				int ver = Map.getVerNumber(transform.position.y);
+				int row = Map.getRowNumber(transform.position.x);
+				int col = Map.getColNumber(transform.position.z);
+				if(gm.switchable(ver,row,col)){
+					gm.switchState(row,col);
+				}else{
 
+				}
 			}
+			anim.SetFloat("Speed", velocity.magnitude);
 			controller.Move(velocity);
 			if ((controller.collisionFlags & CollisionFlags.Sides) == 0)
 			{

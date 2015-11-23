@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -95,6 +95,7 @@ public class Movement : MonoBehaviour
 		if (anim.speed == 0) {
 			anim.speed = prev_anim_speed;
 		}
+
 		var targetDirection = target_go.transform.position - this.transform.position;
 		if (fleeing && (targetDirection.magnitude < 30.0f)) {
 			behav = "Flee";
@@ -107,6 +108,7 @@ public class Movement : MonoBehaviour
 			//this.transform.position = Flee(target.transform.position);
 
 		} else if (behav == "Wander") {
+			/*
 			elapsed_time += Time.deltaTime;
 			if (elapsed_time > wander_interval) {
 				wander_dest = m.RandomPosition ();
@@ -116,6 +118,7 @@ public class Movement : MonoBehaviour
 				elapsed_time = 0.0f;
 			}
 			followPath ();
+			*/
 		} else if (behav == "FlockingWander") {
 			Vector3 expected_pos = gm.getPosition (this.gameObject);
 			ReachGoal (expected_pos, true);
