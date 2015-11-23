@@ -102,17 +102,6 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	public bool switchable(int ver,int row,int col){
-		int player_state = getPlayerState ();
-		int next_player_state = (player_state + 1) % 3;
-		int [,,] next_grid = m.getLevel () [next_player_state];
-		if (next_grid [ver, row, col] == 1) {
-			//TODO: replace hardcoded 1
-			return false;
-		}
-		return true;
-	}
-
 	private void flipTile(int ver,int row,int col,int new_tile_type,float interval){
 		GameObject old_go = m.unRegisterGridGameObject (ver, row, col);
 		float below_y = (float)(Map.getYCoordinate (ver) - 0.5 * Map.TILE_SIZE);
@@ -128,24 +117,36 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void switchState(int center_row,int center_col){
+	public bool switchState(int center_row,int center_col){
 		int player_state = getPlayerState();
 		int next_player_state = (player_state + 1) % 3;
 		int [,,] current_grid = m.getLevel () [player_state];
 		int [,,] next_grid = m.getLevel () [next_player_state];
-		float flip_tile_interval = flip_map_interval / (m.getNRows () + m.getNCols ());
-		for (int row=0; row<m.getNRows(); row++) {
-			for (int ver=0; ver<m.getNVers(); ver++) {
-				for (int col=0; col<m.getNCols(); col++) {
-					//Debug.Log (row+" "+ver+" "+col);
-					if(current_grid[ver,row,col] != next_grid[ver,row,col]){
-						flipTile(ver,row,col,next_grid[ver,row,col],(Mathf.Abs (row-center_row)+Mathf.Abs(col-center_col))*flip_tile_interval);
+		int new_tile_type = next_grid [0, center_row, center_col];
+		if (new_tile_type == 1) {
+			//TODO: replace hardcoded 0 and 1
+			var warning_tile = Map.renderGameObject (new Vector3 (Map.getXCoordinate (center_row), Map.getYCoordinate (0), Map.getZCoordinate (center_col)),Level1.tileMapping [new_tile_type]);
+			//TODO: replace hardcoded 0
+			Destroy (warning_tile.GetComponent<Rigidbody>());
+			Destroy (warning_tile.GetComponent<BoxCollider>());
+			warning_tile.GetComponent<TileControl> ().destroy (0.5f, -0.5f);
+			return false;
+		} else {
+			float flip_tile_interval = flip_map_interval / (m.getNRows () + m.getNCols ());
+			for (int row=0; row<m.getNRows(); row++) {
+				for (int ver=0; ver<m.getNVers(); ver++) {
+					for (int col=0; col<m.getNCols(); col++) {
+						//Debug.Log (row+" "+ver+" "+col);
+						if (current_grid [ver, row, col] != next_grid [ver, row, col]) {
+							flipTile (ver, row, col, next_grid [ver, row, col], (Mathf.Abs (row - center_row) + Mathf.Abs (col - center_col)) * flip_tile_interval);
+						}
 					}
 				}
 			}
+			current_flips += 1;
+			player_movement.current_state = next_player_state;
+			return true;
 		}
-		current_flips += 1;
-		player_movement.current_state = next_player_state;
 	}
 
     public void ChangeGame()

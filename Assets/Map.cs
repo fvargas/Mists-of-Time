@@ -85,7 +85,7 @@ public class Map {
 		}
 	}
 
-	private GameObject renderGameObject(Vector3 loc, string resource) {
+	public static GameObject renderGameObject(Vector3 loc, string resource) {
 		GameObject obj = (GameObject) Object.Instantiate(Resources.Load(resource) as GameObject, loc, Quaternion.identity);
 		if (resource == "Dragon") {
 			obj.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);

@@ -118,10 +118,9 @@ public class PlayerControl : MonoBehaviour
 				int ver = Map.getVerNumber(transform.position.y);
 				int row = Map.getRowNumber(transform.position.x);
 				int col = Map.getColNumber(transform.position.z);
-				if(gm.switchable(ver,row,col)){
-					gm.switchState(row,col);
+				if(gm.switchState(row,col)){
 				}else{
-
+					
 				}
 			}
 			anim.SetFloat("Speed", velocity.magnitude);
