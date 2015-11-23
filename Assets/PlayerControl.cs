@@ -81,7 +81,6 @@ public class PlayerControl : MonoBehaviour
 			//Debug.Log(velocity.y);
 			if (controller.isGrounded)
 			{
-				Debug.Log ("Grounded");
 				velocity = Vector3.zero;
 				if (Input.GetKey(KeyCode.W))
 				{

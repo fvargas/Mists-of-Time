@@ -49,13 +49,7 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		m = new Map (); // Yes, this is kind of a problem
 		current_state = 0;
-
-		target_go = GameObject.Find ("magic_archer");
-		Vector3 tpos = target_go.transform.position;
-		prev_target_loc = new Vector4 (tpos.x, tpos.y, tpos.z, 0);
-
         current_acceleration = max_speed;
 
 		current_interval = 0f;
@@ -65,12 +59,15 @@ public class Movement : MonoBehaviour
         }
 		game_manager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 		gm = game_manager.gm;
-		//m = game_manager.m;
+		m = game_manager.m;
 
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;
         wander_dest.z = transform.position.z;
-        //Debug.Log(wander_dest);
+
+		target_go = GameObject.Find ("magic_archer");
+		Vector3 tpos = target_go.transform.position;
+		prev_target_loc = new Vector4 (tpos.x, tpos.y, tpos.z, game_manager.player_state);
 
 		if (behav == "Chase") {
 			Plan (prev_target_loc);
@@ -142,10 +139,7 @@ public class Movement : MonoBehaviour
 		} else if (behav == "Chase") {
 			current_interval += Time.deltaTime;
 			Vector3 tpos = target_go.transform.position;
-			Debug.Log (target_go);
-			Debug.Log(target_go.GetComponent<Movement>());
-			//*** Last argument should really be the current state of the target
-			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, 0);
+			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.player_state);
 			if (Vector4.Distance(prev_target_loc, target_loc) > 2.0 && current_interval > interval) {
 				current_interval = 0f;
 				prev_target_loc = target_loc;

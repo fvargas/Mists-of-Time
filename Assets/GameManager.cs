@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour {
 	public float flip_tile_interval = 0.05f;
 	private Text status_txt;
 	public float freeze_timer = 0f;
+	public int player_state = 0;
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
 		{ Map.EMPTY, 1 },
