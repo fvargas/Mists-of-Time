@@ -119,10 +119,14 @@ public class PlayerControl : MonoBehaviour
 				int col = m.getColNumber(transform.position.z);
 
 				if(gm.switchState(row,col)){
-						gm.timeTravel(gameObject, gm.getPlayerState());
-					Camera.main.GetComponent<DoubleVision> ().enabled = true;
-					Camera.main.GetComponent<DoubleVision> ().resetEffect (1.5f);
-					this.GetComponent<EffectControl>().showParticleEffect("holy",1);
+					gm.timeTravel(gameObject, gm.getPlayerState());
+					DoubleVision dv = Camera.main.GetComponent<DoubleVision> ();
+					dv.enabled = true;
+					dv.resetEffect (1.5f);
+					RGBSplit rgb_sp = Camera.main.GetComponent<RGBSplit> ();
+					rgb_sp.enabled = true;
+					rgb_sp.resetEffect(1.5f);
+
 				}else{
 					sm.PlaySingle(time_travel_fail);
 				}

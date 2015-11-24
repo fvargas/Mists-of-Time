@@ -39,7 +39,7 @@ public class DoubleVision : CC_Base
 		current_timer += Time.deltaTime;
 		if (current_interval >= change_interval) {
 			current_interval = 0;
-			target_amount = (current_timer > timer*0.7)?0:(Random.value+0.4f);
+			target_amount = (current_timer > timer*0.7)?0f:(Random.value*0.4f+0.6f);
 
 		}
 		if (current_timer > timer * 0.6) {
@@ -48,7 +48,7 @@ public class DoubleVision : CC_Base
 		if (current_timer > timer) {
 			this.enabled = false;
 		}
-		amount += (amount > target_amount)?(-0.3f*Time.deltaTime):(0.6f*Time.deltaTime);
+		amount += (amount > target_amount)?(-0.2f*Time.deltaTime):(1f*Time.deltaTime);
 		displace += (target_displace - displace) * Time.deltaTime*1.5f;
 		if (amount < 0)
 			amount = 0;

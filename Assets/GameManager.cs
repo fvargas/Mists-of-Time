@@ -76,24 +76,8 @@ public class GameManager : MonoBehaviour {
 
 	public void timeTravel(GameObject obj, int state) {
 		gos [obj] = state;
+		obj.GetComponent<Movement> ().doTimeTravel (state);
 
-		foreach (DictionaryEntry de in gos) {
-			if ((int)de.Value == player_state) {
-				foreach (Renderer r in ((GameObject)de.Key).GetComponentsInChildren<Renderer>()) {
-					r.enabled = true;
-				}
-				foreach (Collider c in ((GameObject)de.Key).GetComponentsInChildren<Collider>()) {
-					c.enabled = true;
-				}
-			} else {
-				foreach (Renderer r in ((GameObject)de.Key).GetComponentsInChildren<Renderer>()) {
-					r.enabled = false;
-				}
-				foreach (Collider c in ((GameObject)de.Key).GetComponentsInChildren<Collider>()) {
-					c.enabled = false;
-				}
-			}
-		}
 	}
 
 	public int getPlayerState(){
@@ -174,6 +158,15 @@ public class GameManager : MonoBehaviour {
 			}
 			current_flips += 1;
 			player_state = next_player_state;
+
+			/* Adjust Enemies */
+			foreach (DictionaryEntry de in gos) {
+				if ((int)de.Value == player_state) {
+					((GameObject)de.Key).GetComponent<Movement>().displayOnMap(true);
+				} else {
+					((GameObject)de.Key).GetComponent<Movement>().displayOnMap(false);
+				}
+			}
 			return true;
 		}
 	}

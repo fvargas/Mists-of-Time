@@ -47,6 +47,8 @@ public class Movement : MonoBehaviour
 	public static int LEFT = 3;
 	public static int RIGHT = 4;
 
+	public float time_travel_timer;
+
 	SoundManager sm;
     // Use this for initialization
     void Start()
@@ -96,9 +98,24 @@ public class Movement : MonoBehaviour
 			return;
 		}
 
+		/* Time Travel */
+		if (time_travel_timer > 0) {
+			time_travel_timer -= Time.deltaTime;
+			if (time_travel_timer <= 0){
+				time_travel_timer = 0f;
+				
+			}
+			return;
+		}
+
+
+		/* Animation */
+
 		if (anim.speed == 0) {
 			anim.speed = prev_anim_speed;
 		}
+
+		/* Movement */
 
 		var targetDirection = target_go.transform.position - this.transform.position;
 		if (fleeing && (targetDirection.magnitude < 30.0f)) {
@@ -201,6 +218,27 @@ public class Movement : MonoBehaviour
 
 	public void addPacePoint(Vector3 v) {
 		pace_points.Add (v);
+	}
+
+	public void displayOnMap(bool f){
+		foreach (Renderer r in GetComponentsInChildren<Renderer>()) {
+			r.enabled = f;
+		}
+		foreach (Collider c in GetComponentsInChildren<Collider>()) {
+			c.enabled = f;
+		}
+
+	}
+
+	public void doTimeTravel(int state){
+		current_state = state;
+		this.GetComponent<EffectControl>().showParticleEffect("holy",1);
+		if (current_state == game_manager.getPlayerState()) {
+			displayOnMap(true);
+		} else {
+			displayOnMap(false);
+		}
+		time_travel_timer = 1f;
 	}
 
 	public void jump(int direction){
