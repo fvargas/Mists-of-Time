@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour {
 	public float flip_map_interval = 0.5f;
 	private Text status_txt;
 	public float freeze_timer = 0f;
-	Movement player_movement;
+	private int player_state = 0;
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
 		{ Map.EMPTY, 1 },
@@ -51,7 +51,6 @@ public class GameManager : MonoBehaviour {
 	};
 	// Use this for initialization
 	void Start () {
-		player_movement = GameObject.Find ("player").GetComponent<Movement>();
 		//Debug.Log (GameObject.Find ("magic_archer"));
 		//Debug.Log (player_movement);
 		/*Component [] comps = GameObject.Find ("mon05 (2)").GetComponents(typeof(Component));
@@ -68,7 +67,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public int getPlayerState(){
-		return player_movement.current_state;
+		return player_state;
 	}
 
 	public static void setMark(Vector3 r) {
@@ -119,7 +118,7 @@ public class GameManager : MonoBehaviour {
 
 	public bool switchState(int center_row,int center_col){
 		int player_state = getPlayerState();
-		int next_player_state = (player_state + 1) % 3;
+		int next_player_state = (player_state + 1) % 3; //TODO Fix this so levels with a different number of states also work
 		int [,,] current_grid = m.getLevel () [player_state];
 		int [,,] next_grid = m.getLevel () [next_player_state];
 		int new_tile_type = next_grid [0, center_row, center_col];
@@ -144,7 +143,7 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 			current_flips += 1;
-			player_movement.current_state = next_player_state;
+			player_state = next_player_state;
 			return true;
 		}
 	}

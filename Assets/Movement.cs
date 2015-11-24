@@ -67,7 +67,7 @@ public class Movement : MonoBehaviour
 
 		target_go = GameObject.Find ("player");
 		Vector3 tpos = target_go.transform.position;
-		prev_target_loc = new Vector4 (tpos.x, tpos.y, tpos.z, game_manager.player_state);
+		prev_target_loc = new Vector4 (tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
 
 		if (behav == "Chase") {
 			Vector3 pos = this.transform.position;
@@ -144,7 +144,7 @@ public class Movement : MonoBehaviour
 		} else if (behav == "Chase") {
 			current_interval += Time.deltaTime;
 			Vector3 tpos = target_go.transform.position;
-			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.player_state);
+			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
 			if (Vector4.Distance(prev_target_loc, target_loc) > 2.0 && current_interval > interval) {
 				current_interval = 0f;
 				prev_target_loc = target_loc;
