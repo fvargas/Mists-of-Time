@@ -57,7 +57,9 @@ public class Movement : MonoBehaviour
         {
             behav = "Wander";
         }
+
 		game_manager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		game_manager.registerCharacter (gameObject, current_state);
 		gm = game_manager.gm;
 		m = game_manager.m;
 
@@ -145,7 +147,8 @@ public class Movement : MonoBehaviour
 			current_interval += Time.deltaTime;
 			Vector3 tpos = target_go.transform.position;
 			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
-			if (Vector4.Distance(prev_target_loc, target_loc) > 2.0 && current_interval > interval) {
+			if ((Vector4.Distance(prev_target_loc, target_loc) > 2.0 && current_interval > interval) ||
+			    target_loc.w != prev_target_loc.w) {
 				current_interval = 0f;
 				prev_target_loc = target_loc;
 				Vector3 pos = this.transform.position;

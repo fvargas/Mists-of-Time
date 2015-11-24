@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour {
 	private Text status_txt;
 	public float freeze_timer = 0f;
 	private int player_state = 0;
+	
+	private Hashtable gos = new Hashtable();
+
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
 		{ Map.EMPTY, 1 },
@@ -64,6 +67,23 @@ public class GameManager : MonoBehaviour {
 
 		//status_txt = GameObject.Find ("Status_Text").GetComponent<Text> ();
 		//status_txt.text = "HP:3";
+	}
+
+	public void registerCharacter(GameObject obj, int state) {
+		gos.Add (obj, state);
+	}
+
+	public void timeTravel(GameObject obj, int state) {
+		gos [obj] = state;
+
+		foreach (DictionaryEntry de in gos) {
+			Renderer r = ((GameObject)de.Key).GetComponentsInChildren<Renderer>()[0];
+			if ((int)de.Value == player_state) {
+				r.enabled = true;
+			} else {
+				r.enabled = false;
+			}
+		}
 	}
 
 	public int getPlayerState(){
@@ -116,8 +136,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public bool switchState(int center_row,int center_col){
-		int player_state = getPlayerState();
+	public bool switchState(int center_row,int center_col) {
+		if (center_row < 0 || center_row >= m.getNRows () || center_col < 0 || center_col >= m.getNCols ()) {
+			return false;
+		}
+
 		int next_player_state = (player_state + 1) % 3; //TODO Fix this so levels with a different number of states also work
 		int [,,] current_grid = m.getLevel () [player_state];
 		int [,,] next_grid = m.getLevel () [next_player_state];
