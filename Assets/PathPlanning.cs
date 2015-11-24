@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 public class PathPlanning
 {
+	private static Map m = GameObject.Find ("GameManager").GetComponent<GameManager> ().m;
+
 	public static List<Vector4> Plan (Vector4 start, Vector4 target)
 	{
-		Map m = GameObject.Find ("GameManager").GetComponent<GameManager> ().m;
 		PQ pq = new PQ();
 		HashSet<Vector4> visited = new HashSet<Vector4>();
 		int target_x = Map.getRowNumber(target.x);
@@ -28,168 +29,180 @@ public class PathPlanning
 			if (n.x == target_x && n.y == target_y && n.z == target_z && n.w == target_w)
 			{
 				return n.path;
-				//DrawPath();
 			}
-			
-			bool atLadder = m.getGridValue(n.w, n.x, n.y, n.z) == Map.GO_LADDER;
-			
-			// Set of actions for 6-way connected grid
-			if (isValid(n.x - 1, n.y, n.z, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x - 1, n.y, n.z, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x - 1, n.y, n.z, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
-				//}
-				Node newNode = new Node(n.x - 1, n.y, n.z, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (isValid(n.x + 1, n.y, n.z, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x + 1, n.y, n.z, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x + 1, n.y, n.z, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z)];
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z)];
-				//}
-				Node newNode = new Node(n.x + 1, n.y, n.z, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (atLadder && isValid(n.x, n.y - 1, n.z, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x, n.y - 1, n.z, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x, n.y - 1, n.z, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y - 1, n.z)];
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y - 1, n.z)];
-				//}
-				Node newNode = new Node(n.x, n.y - 1, n.z, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (atLadder && isValid(n.x, n.y + 1, n.z, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x, n.y + 1, n.z, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x, n.y + 1, n.z, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y + 1, n.z)];
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y + 1, n.z)];
-				//}
-				Node newNode = new Node(n.x, n.y + 1, n.z, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (isValid(n.x, n.y, n.z - 1, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x, n.y, n.z - 1, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y, n.z - 1)];
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y, n.z - 1)];
-				//}
-				Node newNode = new Node(n.x, n.y, n.z - 1, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (isValid(n.x, n.y, n.z + 1, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x, n.y, n.z + 1, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y, n.z + 1)];
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y, n.z + 1)];
-				//}
-				Node newNode = new Node(n.x, n.y, n.z + 1, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			
-			// Additional set of actions for 10-way connected grid
-			if (isValid(n.x - 1, n.y, n.z - 1, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x - 1, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x - 1, n.y, n.z - 1, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z - 1)] * 1.4f;
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z - 1)] * 1.4f;
-				//}
-				Node newNode = new Node(n.x - 1, n.y, n.z - 1, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (isValid(n.x - 1, n.y, n.z + 1, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x - 1, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x - 1, n.y, n.z + 1, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z + 1)] * 1.4f;
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z + 1)] * 1.4f;
-				//}
-				Node newNode = new Node(n.x - 1, n.y, n.z + 1, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (isValid(n.x + 1, n.y, n.z - 1, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x + 1, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x + 1, n.y, n.z - 1, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z - 1)] * 1.4f;
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z - 1)] * 1.4f;
-				//}
-				Node newNode = new Node(n.x + 1, n.y, n.z - 1, n.w, cost, h, newPath);
-				pq.insert(newNode);
-			}
-			if (isValid(n.x + 1, n.y, n.z + 1, n.w, visited))
-			{
-				float h = Node.euclideanDistance(n.x + 1, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				newPath.Add(new Vector4(n.x + 1, n.y, n.z + 1, n.w));
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z + 1)] * 1.4f;
-				} else {*/
-					cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z + 1)] * 1.4f;
-				//}
-				Node newNode = new Node(n.x + 1, n.y, n.z + 1, n.w, cost, h, newPath);
-				pq.insert(newNode);
+
+			int numLevels = m.getNLevels();
+			processNextActions(pq, visited, n, target_x, target_y, target_z, target_w);
+			if (numLevels >= 2) {
+				n.w = (n.w + 1) % numLevels;
+				processNextActions(pq, visited, n, target_x, target_y, target_z, target_w);
+				if (numLevels >= 3) {
+					n.w = (n.w - 1 + numLevels) % numLevels;
+					processNextActions(pq, visited, n, target_x, target_y, target_z, target_w);
+				}
 			}
 		}
-		
-		//DrawPath();
+
 		return new List<Vector4> ();
+	}
+
+	private static void processNextActions(PQ pq, HashSet<Vector4> visited, Node n, int target_x, int target_y, int target_z, int target_w)
+	{
+		bool atLadder = m.getGridValue(n.w, n.x, n.y, n.z) == Map.GO_LADDER;
+
+		// Set of actions for 6-way connected grid
+		if (isValid(n.x - 1, n.y, n.z, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x - 1, n.y, n.z, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x - 1, n.y, n.z, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
+			//}
+			Node newNode = new Node(n.x - 1, n.y, n.z, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (isValid(n.x + 1, n.y, n.z, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x + 1, n.y, n.z, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x + 1, n.y, n.z, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z)];
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z)];
+			//}
+			Node newNode = new Node(n.x + 1, n.y, n.z, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (atLadder && isValid(n.x, n.y - 1, n.z, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x, n.y - 1, n.z, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x, n.y - 1, n.z, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y - 1, n.z)];
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y - 1, n.z)];
+			//}
+			Node newNode = new Node(n.x, n.y - 1, n.z, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (atLadder && isValid(n.x, n.y + 1, n.z, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x, n.y + 1, n.z, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x, n.y + 1, n.z, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y + 1, n.z)];
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y + 1, n.z)];
+			//}
+			Node newNode = new Node(n.x, n.y + 1, n.z, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (isValid(n.x, n.y, n.z - 1, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x, n.y, n.z - 1, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y, n.z - 1)];
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y, n.z - 1)];
+			//}
+			Node newNode = new Node(n.x, n.y, n.z - 1, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (isValid(n.x, n.y, n.z + 1, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x, n.y, n.z + 1, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x, n.y, n.z + 1)];
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x, n.y, n.z + 1)];
+			//}
+			Node newNode = new Node(n.x, n.y, n.z + 1, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		
+		// Additional set of actions for 10-way connected grid
+		if (isValid(n.x - 1, n.y, n.z - 1, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x - 1, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x - 1, n.y, n.z - 1, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z - 1)] * 1.4f;
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z - 1)] * 1.4f;
+			//}
+			Node newNode = new Node(n.x - 1, n.y, n.z - 1, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (isValid(n.x - 1, n.y, n.z + 1, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x - 1, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x - 1, n.y, n.z + 1, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z + 1)] * 1.4f;
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z + 1)] * 1.4f;
+			//}
+			Node newNode = new Node(n.x - 1, n.y, n.z + 1, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (isValid(n.x + 1, n.y, n.z - 1, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x + 1, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x + 1, n.y, n.z - 1, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z - 1)] * 1.4f;
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z - 1)] * 1.4f;
+			//}
+			Node newNode = new Node(n.x + 1, n.y, n.z - 1, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
+		if (isValid(n.x + 1, n.y, n.z + 1, n.w, visited))
+		{
+			float h = Node.euclideanDistance(n.x + 1, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
+			List<Vector4> newPath = new List<Vector4>(n.path);
+			newPath.Add(new Vector4(n.x + 1, n.y, n.z + 1, n.w));
+			
+			float cost;
+			/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z + 1)] * 1.4f;
+				} else {*/
+			cost = n.g + GameManager.gridValueMap[m.getGridValue(n.w, n.x + 1, n.y, n.z + 1)] * 1.4f;
+			//}
+			Node newNode = new Node(n.x + 1, n.y, n.z + 1, n.w, cost, h, newPath);
+			pq.insert(newNode);
+		}
 	}
 
 	private static bool isValid(int x, int y, int z, int w, HashSet<Vector4> visited)

@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour {
 			return false;
 		}
 
-		int next_player_state = (player_state + 1) % 3; //TODO Fix this so levels with a different number of states also work
+		int next_player_state = (player_state + 1) % m.getNLevels();
 		int [,,] current_grid = m.getLevel () [player_state];
 		int [,,] next_grid = m.getLevel () [next_player_state];
 		int new_tile_type = next_grid [0, center_row, center_col];
