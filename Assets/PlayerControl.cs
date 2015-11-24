@@ -115,9 +115,9 @@ public class PlayerControl : MonoBehaviour
 			{
 
 				gm.freeze(1f);
-				int ver = Map.getVerNumber(transform.position.y);
-				int row = Map.getRowNumber(transform.position.x);
-				int col = Map.getColNumber(transform.position.z);
+				int ver = m.getVerNumber(transform.position.y);
+				int row = m.getRowNumber(transform.position.x);
+				int col = m.getColNumber(transform.position.z);
 				if(gm.switchState(row,col)){
 					gm.timeTravel(gameObject, gm.getPlayerState());
 				} else {

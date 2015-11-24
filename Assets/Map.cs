@@ -156,16 +156,25 @@ public class Map {
 		game_objects.AddLast (go);
 	}
 
-	public static int getRowNumber(float x) {
-		return (int)Mathf.Round(x / TILE_SIZE);
+	public int getRowNumber(float x) {
+		int num = (int)Mathf.Round (x / TILE_SIZE);
+		num = num >= 0 ? num : 0;
+		int numRows = getNRows ();
+		return num >= numRows ? numRows - 1 : num; 
 	}
 
-	public static int getVerNumber(float y) {
-		return (int)Mathf.Round(y / TILE_SIZE);
+	public int getVerNumber(float y) {
+		int num = (int)Mathf.Round (y / TILE_SIZE);
+		num = num >= 0 ? num : 0; 
+		int numVers = getNVers ();
+		return num >= numVers ? numVers - 1 : num;
 	}
 
-	public static int getColNumber(float z) {
-		return (int)Mathf.Round(z / TILE_SIZE);
+	public int getColNumber(float z) {
+		int num = (int)Mathf.Round (z / TILE_SIZE);
+		num = num >= 0 ? num : 0;
+		int numCols = getNCols ();
+		return num >= numCols ? numCols - 1 : num;
 	}
 
 	public static float getXCoordinate(int row){

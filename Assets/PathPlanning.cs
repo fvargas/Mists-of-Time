@@ -9,13 +9,13 @@ public class PathPlanning
 	{
 		PQ pq = new PQ();
 		HashSet<Vector4> visited = new HashSet<Vector4>();
-		int target_x = Map.getRowNumber(target.x);
-		int target_y = Map.getVerNumber(target.y);
-		int target_z = Map.getColNumber(target.z);
+		int target_x = m.getRowNumber(target.x);
+		int target_y = m.getVerNumber(target.y);
+		int target_z = m.getColNumber(target.z);
 		int target_w = (int)target.w;
-		int start_x = Map.getRowNumber(start.x);
-		int start_y = Map.getVerNumber(start.y);
-		int start_z = Map.getColNumber(start.z);
+		int start_x = m.getRowNumber(start.x);
+		int start_y = m.getVerNumber(start.y);
+		int start_z = m.getColNumber(start.z);
 		int start_w = (int)start.w;
 		
 		float md = Node.euclideanDistance(start_x, start_y, start_z, start_w, target_x, target_y, target_z, target_w);

@@ -78,8 +78,8 @@ public class Movement : MonoBehaviour
 		anim = GetComponent<Animator>();
 		controller = GetComponent<CharacterController>();
 		prev_anim_speed = anim.speed;
-		next_row = Map.getRowNumber(this.transform.position.x);
-		next_col = Map.getColNumber(this.transform.position.z);
+		next_row = m.getRowNumber(this.transform.position.x);
+		next_col = m.getColNumber(this.transform.position.z);
     }
 
     // Update is called once per frame
@@ -202,8 +202,8 @@ public class Movement : MonoBehaviour
 	}
 
 	public void jump(int direction){
-		int row = Map.getRowNumber(this.transform.position.x);
-		int col = Map.getColNumber(this.transform.position.z);
+		int row = m.getRowNumber(this.transform.position.x);
+		int col = m.getColNumber(this.transform.position.z);
 		if (direction == UP)
 		{
 			this.transform.LookAt(this.transform.position + new Vector3(1, 0, 0));
