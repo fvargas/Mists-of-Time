@@ -31,16 +31,7 @@ public class PathPlanning
 				return n.path;
 			}
 
-			int numLevels = m.getNLevels();
 			processNextActions(pq, visited, n, target_x, target_y, target_z, target_w);
-			if (numLevels >= 2) {
-				n.w = (n.w + 1) % numLevels;
-				processNextActions(pq, visited, n, target_x, target_y, target_z, target_w);
-				if (numLevels >= 3) {
-					n.w = (n.w - 1 + numLevels) % numLevels;
-					processNextActions(pq, visited, n, target_x, target_y, target_z, target_w);
-				}
-			}
 		}
 
 		return new List<Vector4> ();
@@ -203,11 +194,49 @@ public class PathPlanning
 			Node newNode = new Node(n.x + 1, n.y, n.z + 1, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
+
+		// Set of actions for time travel
+		int numLevels = m.getNLevels();
+		if (numLevels >= 2) {
+			int w = (n.w + 1) % numLevels;
+			if (isValid(n.x, n.y, n.z, w, visited))
+			{
+				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
+				List<Vector4> newPath = new List<Vector4>(n.path);
+				newPath.Add(new Vector4(n.x, n.y, n.z, w));
+				
+				float cost;
+				/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
+				} else {*/
+				cost = n.g + GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+				//}
+				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
+				pq.insert(newNode);
+			}
+		}
+		if (numLevels >= 3) {
+			int w = (n.w - 1 + numLevels) % numLevels;
+			if (isValid(n.x, n.y, n.z, w, visited))
+			{
+				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
+				List<Vector4> newPath = new List<Vector4>(n.path);
+				newPath.Add(new Vector4(n.x, n.y, n.z, w));
+				
+				float cost;
+				/*if (this.tag == "Dragon") {
+					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
+				} else {*/
+				cost = n.g + GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+				//}
+				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
+				pq.insert(newNode);
+			}
+		}
 	}
 
 	private static bool isValid(int x, int y, int z, int w, HashSet<Vector4> visited)
 	{
-		Map m = GameObject.Find ("GameManager").GetComponent<GameManager> ().m;
 		int numRows = m.getNRows();
 		int numCols = m.getNCols();
 		int numVers = m.getNVers();

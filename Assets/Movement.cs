@@ -232,30 +232,30 @@ public class Movement : MonoBehaviour
 		moveDirection.y = maxJumpSpeed;
 	}
 
-
-
-
-    bool ReachGoal(Vector3 destination, bool following = false)
+    bool ReachGoal(Vector4 dest, bool following = false)
     {
-        current_acceleration = 2.7f;
-        
-        var obstacles = hasObstacles();
-        if (obstacles != 0)
-        {
-            adjustDirection(this.transform.rotation, obstacles);
-            this.transform.position -= this.transform.right * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
-        }
-        else
-        {
-            var direction = destination - this.transform.position;
-            this.transform.LookAt((this.transform.position + direction));
-            this.transform.Rotate(new Vector3(0,90,0));
-            direction.Normalize();
-            this.transform.position += direction * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2));
-        }
+		if (dest.w != current_state) {
+			current_state = (int)dest.w;
+			game_manager.timeTravel (gameObject, (int)dest.w);
+			return true;
+		} else {
+			current_acceleration = 2.7f;
+	        
+			var obstacles = hasObstacles ();
+			if (obstacles != 0) {
+				adjustDirection (this.transform.rotation, obstacles);
+				this.transform.position -= this.transform.right * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow (Time.deltaTime, 2));
+			} else {
+				var direction = (Vector3)dest - this.transform.position;
+				this.transform.LookAt ((this.transform.position + direction));
+				this.transform.Rotate (new Vector3 (0, 90, 0));
+				direction.Normalize ();
+				this.transform.position += direction * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow (Time.deltaTime, 2));
+			}
 
-		var bearing = destination - this.transform.position;
-		return bearing.magnitude < 1.0f;
+			var bearing = (Vector3)dest - this.transform.position;
+			return bearing.magnitude < 1.0f;
+		}
     }
 
 	/**
