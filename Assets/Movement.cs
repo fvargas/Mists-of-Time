@@ -242,7 +242,8 @@ public class Movement : MonoBehaviour
 			current_acceleration = 2.7f;
 	        
 			var obstacles = hasObstacles ();
-			if (obstacles != 0) {
+			//*** Collision avoidance is disabled until it works reasonably
+			if (false && obstacles != 0) {
 				adjustDirection (this.transform.rotation, obstacles);
 				this.transform.position -= this.transform.right * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow (Time.deltaTime, 2));
 			} else {
