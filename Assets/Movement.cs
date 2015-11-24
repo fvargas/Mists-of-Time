@@ -64,7 +64,7 @@ public class Movement : MonoBehaviour
 		game_manager.registerCharacter (gameObject, current_state);
 		gm = game_manager.gm;
 		m = game_manager.m;
-
+		Debug.Log (m);
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;
         wander_dest.z = transform.position.z;
@@ -75,7 +75,7 @@ public class Movement : MonoBehaviour
 
 		if (behav == "Chase") {
 			Vector3 pos = this.transform.position;
-			target_path = PathPlanning.Plan (new Vector4(pos.x, pos.y, pos.z, current_state), prev_target_loc);
+			target_path = PathPlanning.Plan (new Vector4(pos.x, pos.y, pos.z, current_state), prev_target_loc,m);
 		}
 		anim = GetComponent<Animator>();
 		controller = GetComponent<CharacterController>();
@@ -154,7 +154,7 @@ public class Movement : MonoBehaviour
 				current_interval = 0f;
 				prev_target_loc = target_loc;
 				Vector3 pos = this.transform.position;
-				target_path = PathPlanning.Plan (new Vector4(pos.x, pos.y, pos.z, current_state), prev_target_loc);
+				target_path = PathPlanning.Plan (new Vector4(pos.x, pos.y, pos.z, current_state), prev_target_loc,m);
 			}
 
 			followPath ();

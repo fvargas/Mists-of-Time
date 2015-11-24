@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void registerCharacter(GameObject obj, int state) {
-		gos.Add (obj, state);
+		gos [obj] = state;
 	}
 
 	public void timeTravel(GameObject obj, int state) {

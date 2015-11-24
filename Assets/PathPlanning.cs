@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 public class PathPlanning
 {
-	private static Map m = GameObject.Find ("GameManager").GetComponent<GameManager> ().m;
 
-	public static List<Vector4> Plan (Vector4 start, Vector4 target)
+	public static List<Vector4> Plan (Vector4 start, Vector4 target, Map m)
 	{
 		PQ pq = new PQ();
 		HashSet<Vector4> visited = new HashSet<Vector4>();
@@ -31,18 +30,18 @@ public class PathPlanning
 				return n.path;
 			}
 
-			processNextActions(pq, visited, n, target_x, target_y, target_z, target_w);
+			processNextActions(pq, visited, n, target_x, target_y, target_z, target_w,m);
 		}
 
 		return new List<Vector4> ();
 	}
 
-	private static void processNextActions(PQ pq, HashSet<Vector4> visited, Node n, int target_x, int target_y, int target_z, int target_w)
+	private static void processNextActions(PQ pq, HashSet<Vector4> visited, Node n, int target_x, int target_y, int target_z, int target_w, Map m)
 	{
 		bool atLadder = m.getGridValue(n.w, n.x, n.y, n.z) == Map.GO_LADDER;
 
 		// Set of actions for 6-way connected grid
-		if (isValid(n.x - 1, n.y, n.z, n.w, visited))
+		if (isValid(n.x - 1, n.y, n.z, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x - 1, n.y, n.z, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -57,7 +56,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x - 1, n.y, n.z, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (isValid(n.x + 1, n.y, n.z, n.w, visited))
+		if (isValid(n.x + 1, n.y, n.z, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x + 1, n.y, n.z, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -72,7 +71,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x + 1, n.y, n.z, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (atLadder && isValid(n.x, n.y - 1, n.z, n.w, visited))
+		if (atLadder && isValid(n.x, n.y - 1, n.z, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x, n.y - 1, n.z, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -87,7 +86,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x, n.y - 1, n.z, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (atLadder && isValid(n.x, n.y + 1, n.z, n.w, visited))
+		if (atLadder && isValid(n.x, n.y + 1, n.z, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x, n.y + 1, n.z, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -102,7 +101,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x, n.y + 1, n.z, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (isValid(n.x, n.y, n.z - 1, n.w, visited))
+		if (isValid(n.x, n.y, n.z - 1, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -117,7 +116,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x, n.y, n.z - 1, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (isValid(n.x, n.y, n.z + 1, n.w, visited))
+		if (isValid(n.x, n.y, n.z + 1, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -134,7 +133,7 @@ public class PathPlanning
 		}
 		
 		// Additional set of actions for 10-way connected grid
-		if (isValid(n.x - 1, n.y, n.z - 1, n.w, visited))
+		if (isValid(n.x - 1, n.y, n.z - 1, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x - 1, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -149,7 +148,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x - 1, n.y, n.z - 1, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (isValid(n.x - 1, n.y, n.z + 1, n.w, visited))
+		if (isValid(n.x - 1, n.y, n.z + 1, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x - 1, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -164,7 +163,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x - 1, n.y, n.z + 1, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (isValid(n.x + 1, n.y, n.z - 1, n.w, visited))
+		if (isValid(n.x + 1, n.y, n.z - 1, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x + 1, n.y, n.z - 1, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -179,7 +178,7 @@ public class PathPlanning
 			Node newNode = new Node(n.x + 1, n.y, n.z - 1, n.w, cost, h, newPath);
 			pq.insert(newNode);
 		}
-		if (isValid(n.x + 1, n.y, n.z + 1, n.w, visited))
+		if (isValid(n.x + 1, n.y, n.z + 1, n.w, visited,m))
 		{
 			float h = Node.euclideanDistance(n.x + 1, n.y, n.z + 1, n.w, target_x, target_y, target_z, target_w);
 			List<Vector4> newPath = new List<Vector4>(n.path);
@@ -199,7 +198,7 @@ public class PathPlanning
 		int numLevels = m.getNLevels();
 		if (numLevels >= 2) {
 			int w = (n.w + 1) % numLevels;
-			if (isValid(n.x, n.y, n.z, w, visited))
+			if (isValid(n.x, n.y, n.z, w, visited,m))
 			{
 				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
 				List<Vector4> newPath = new List<Vector4>(n.path);
@@ -217,7 +216,7 @@ public class PathPlanning
 		}
 		if (numLevels >= 3) {
 			int w = (n.w - 1 + numLevels) % numLevels;
-			if (isValid(n.x, n.y, n.z, w, visited))
+			if (isValid(n.x, n.y, n.z, w, visited,m))
 			{
 				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
 				List<Vector4> newPath = new List<Vector4>(n.path);
@@ -235,7 +234,7 @@ public class PathPlanning
 		}
 	}
 
-	private static bool isValid(int x, int y, int z, int w, HashSet<Vector4> visited)
+	private static bool isValid(int x, int y, int z, int w, HashSet<Vector4> visited, Map m)
 	{
 		int numRows = m.getNRows();
 		int numCols = m.getNCols();
