@@ -80,8 +80,14 @@ public class GameManager : MonoBehaviour {
 			Renderer r = ((GameObject)de.Key).GetComponentsInChildren<Renderer>()[0];
 			if ((int)de.Value == player_state) {
 				r.enabled = true;
+				foreach (Collider c in ((GameObject)de.Key).GetComponentsInChildren<Collider>()) {
+					c.enabled = true;
+				}
 			} else {
 				r.enabled = false;
+				foreach (Collider c in ((GameObject)de.Key).GetComponentsInChildren<Collider>()) {
+					c.enabled = false;
+				}
 			}
 		}
 	}
