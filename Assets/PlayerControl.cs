@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -18,6 +18,7 @@ public class PlayerControl : MonoBehaviour
 	private Map m;
 	GameManager gm;
 	Movement mv;
+	SoundManager sm;
 
 	public Vector3 velocity = Vector3.zero;
 	public int maxJumps = 2;
@@ -27,6 +28,7 @@ public class PlayerControl : MonoBehaviour
 	private bool flip_map = false;
 	private Animator anim;
 	CharacterController controller;
+	public AudioClip time_travel_fail;
 
 	// Use this for initialization
 	void Start()
@@ -36,6 +38,7 @@ public class PlayerControl : MonoBehaviour
 		controller = GetComponent<CharacterController>();
 		m = gm.m;
 		mv = GetComponent<Movement> ();
+		sm = GameObject.Find ("SoundManager").GetComponent<SoundManager> ();
 	}
 	
 	// Update is called once per frame
@@ -78,6 +81,8 @@ public class PlayerControl : MonoBehaviour
 				//jump_speed = 0;
 				currentJumpAcceleration = 0;
 			}
+
+
 			//Debug.Log(Time.deltaTime);
 			//Debug.Log(velocity.y);
 			if (controller.isGrounded)
@@ -86,16 +91,10 @@ public class PlayerControl : MonoBehaviour
 				if (Input.GetKey(KeyCode.W))
 				{
 					this.transform.LookAt(this.transform.position + new Vector3(1, 0, 0));
-
-
-
 				}
 				else if (Input.GetKey(KeyCode.A))
 				{
 					this.transform.LookAt(this.transform.position + new Vector3(0, 0, 1));
-
-
-
 				}
 				else if (Input.GetKey(KeyCode.S))
 				{
@@ -118,13 +117,18 @@ public class PlayerControl : MonoBehaviour
 				int ver = m.getVerNumber(transform.position.y);
 				int row = m.getRowNumber(transform.position.x);
 				int col = m.getColNumber(transform.position.z);
+
 				if(gm.switchState(row,col)){
-					gm.timeTravel(gameObject, gm.getPlayerState());
-				} else {
-					
+						gm.timeTravel(gameObject, gm.getPlayerState());
+					Camera.main.GetComponent<DoubleVision> ().enabled = true;
+					Camera.main.GetComponent<DoubleVision> ().resetEffect (1.5f);
+					this.GetComponent<EffectControl>().showParticleEffect("holy",1);
+				}else{
+					sm.PlaySingle(time_travel_fail);
 				}
 			}
-			anim.SetFloat("Speed", velocity.magnitude);
+			anim.SetFloat("Speed", Mathf.Sqrt(velocity.x*velocity.x+velocity.z*velocity.z));
+			//velocity.y -= 10f*Time.deltaTime;//TODO:replace hardcoded 40
 			controller.Move(velocity);
 			if ((controller.collisionFlags & CollisionFlags.Sides) == 0)
 			{

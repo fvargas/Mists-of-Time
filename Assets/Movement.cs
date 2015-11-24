@@ -46,6 +46,8 @@ public class Movement : MonoBehaviour
 	public static int DOWN = 2;
 	public static int LEFT = 3;
 	public static int RIGHT = 4;
+
+	SoundManager sm;
     // Use this for initialization
     void Start()
     {

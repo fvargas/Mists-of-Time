@@ -20,13 +20,13 @@ public class GameManager : MonoBehaviour {
 	public float current_interval = 0f;
 	public int total_flips = 4;
 	public int current_flips = 0;
-	public float flip_map_interval = 0.5f;
+	public float flip_map_interval = 0.8f;
 	private Text status_txt;
 	public float freeze_timer = 0f;
-	private int player_state = 0;
 	
 	private Hashtable gos = new Hashtable();
-
+	public int player_state;
+	public AudioClip hit_clip;
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
 		{ Map.EMPTY, 1 },
@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour {
 	};
 	// Use this for initialization
 	void Start () {
+		player_state = 0;
 		//Debug.Log (GameObject.Find ("magic_archer"));
 		//Debug.Log (player_movement);
 		/*Component [] comps = GameObject.Find ("mon05 (2)").GetComponents(typeof(Component));
@@ -133,23 +134,20 @@ public class GameManager : MonoBehaviour {
 	private void flipTile(int ver,int row,int col,int new_tile_type,float interval){
 		GameObject old_go = m.unRegisterGridGameObject (ver, row, col);
 		float below_y = (float)(Map.getYCoordinate (ver) - 0.5 * Map.TILE_SIZE);
-		if(old_go != null) old_go.GetComponent<TileControl> ().destroy (interval,below_y);
+		if(old_go != null) old_go.GetComponent<TileControl> ().destroy (interval,below_y,true);
 		if (new_tile_type != Map.EMPTY) {
 			if(Level1.tileMapping [new_tile_type].Equals("EMPTY")) return;
 			//Debug.Log (new_tile_type);
 			//Debug.Log (Level1.tileMapping [new_tile_type]);
 			GameObject new_go = Instantiate (Resources.Load (Level1.tileMapping [new_tile_type]) as GameObject);
 			new_go.transform.position = new Vector3 (Map.getXCoordinate (row), below_y, Map.getZCoordinate (col));
-			new_go.GetComponent<TileControl> ().born (interval, Map.getYCoordinate (ver), m);
+			new_go.GetComponent<TileControl> ().born (interval, Map.getYCoordinate (ver), m,true);
 			m.registerGridGameObject (new_go);
 		}
 	}
-
-	public bool switchState(int center_row,int center_col) {
-		if (center_row < 0 || center_row >= m.getNRows () || center_col < 0 || center_col >= m.getNCols ()) {
+	public bool switchState(int center_row,int center_col){
+		if (center_row < 0 || center_row >= m.getNRows () || center_col < 0 || center_col >= m.getNCols ())
 			return false;
-		}
-
 		int next_player_state = (player_state + 1) % m.getNLevels();
 		int [,,] current_grid = m.getLevel () [player_state];
 		int [,,] next_grid = m.getLevel () [next_player_state];
@@ -160,7 +158,7 @@ public class GameManager : MonoBehaviour {
 			//TODO: replace hardcoded 0
 			Destroy (warning_tile.GetComponent<Rigidbody>());
 			Destroy (warning_tile.GetComponent<BoxCollider>());
-			warning_tile.GetComponent<TileControl> ().destroy (0.5f, -0.5f);
+			warning_tile.GetComponent<TileControl> ().destroy (0.5f, -0.5f,true);
 			return false;
 		} else {
 			float flip_tile_interval = flip_map_interval / (m.getNRows () + m.getNCols ());
