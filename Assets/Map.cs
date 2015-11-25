@@ -96,10 +96,11 @@ public class Map {
 	}
 
 	public static GameObject renderGameObject(Vector3 loc, string resource) {
+
 		GameObject obj = (GameObject) UnityEngine.Object.Instantiate(Resources.Load(resource) as GameObject, loc, Quaternion.identity);
-		/*if (resource == "Dragon") {
-			obj.transform.localScale = new Vector3 (0.3f, 0.3f, 0.3f);
-		}*/
+		if (resource == "crystalB") {
+			obj.transform.localScale = new Vector3 (2f, 2f, 2f);
+		}
 		return obj;
 	}
 

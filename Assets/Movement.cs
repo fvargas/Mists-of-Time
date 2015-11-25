@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Movement : MonoBehaviour
+public class Movement : NetworkBehaviour
 {
 
     private GameObject target_go;
@@ -78,10 +79,7 @@ public class Movement : MonoBehaviour
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;
         wander_dest.z = transform.position.z;
-
-		target_go = GameObject.Find ("player");
-		Vector3 tpos = target_go.transform.position;
-		prev_target_loc = new Vector4 (tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
+        target_go = null;
 
 		if (behav == "Chase") {
 			Vector3 my_pos = this.transform.position;
@@ -106,6 +104,26 @@ public class Movement : MonoBehaviour
 			return;
 		}
 
+        if (anim.speed == 0)
+        {
+            anim.speed = prev_anim_speed;
+        }
+
+        if (target_go == null)
+        {
+            target_go = GameObject.Find("player(Clone)");
+            if (target_go != null)
+            {
+                Vector3 tpos = target_go.transform.position;
+                //prev_target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
+                prev_target_loc = new Vector4(tpos.x, tpos.y, tpos.z, target_go.GetComponent<PlayerControl>().player_state);
+            }
+            else
+            {
+                return;
+            }
+		}
+		
 		/* Time Travel */
 		if (time_travel_timer > 0) {
 			time_travel_timer -= Time.deltaTime;
@@ -116,12 +134,11 @@ public class Movement : MonoBehaviour
 			return;
 		}
 
-
 		/* Animation */
 
 		if (anim.speed == 0) {
 			anim.speed = prev_anim_speed;
-		}
+        }
 
 		/* Movement */
 
@@ -173,7 +190,7 @@ public class Movement : MonoBehaviour
 		} else if (behav == "Chase") {
 			current_interval += Time.deltaTime;
 			Vector3 tpos = target_go.transform.position;
-			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
+            Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, target_go.GetComponent<PlayerControl>().player_state);
 			if (current_interval > interval) {
 				current_interval = 0f;
 				prev_target_loc = target_loc;
@@ -222,6 +239,8 @@ public class Movement : MonoBehaviour
 				m.updateInfluenceMap(prev_location, waypoint, strength);
 				prev_location = waypoint;
 			}
+		} else {
+			//this.anim.SetFloat("Speed",0);
 		}
 	}
 
@@ -238,7 +257,7 @@ public class Movement : MonoBehaviour
 		}
 
 	}
-
+	/*
 	public void doTimeTravel(int state){
 		current_state = state;
 		this.GetComponent<EffectControl>().showParticleEffect("holy",1);
@@ -248,7 +267,7 @@ public class Movement : MonoBehaviour
 			displayOnMap(false);
 		}
 		time_travel_timer = 1f;
-	}
+	}*/
 
 	public void jump(int direction){
 		int row = m.getRowNumber(this.transform.position.x);
@@ -285,7 +304,10 @@ public class Movement : MonoBehaviour
     {
 		if (dest.w != current_state) {
 			current_state = (int)dest.w;
-			game_manager.timeTravel (gameObject, (int)dest.w);
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                go.GetComponent<PlayerControl>().timeTravel(gameObject, (int)dest.w);
+            }
 			return true;
 		} else {
 			current_acceleration = 2.7f;
@@ -301,6 +323,8 @@ public class Movement : MonoBehaviour
 				this.transform.Rotate (new Vector3 (0, 90, 0));
 				direction.Normalize ();
 				this.transform.position += direction * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow (Time.deltaTime, 2));
+				//this.transform.position += delta;
+				//this.anim.SetFloat("Speed",Mathf.Sqrt(Mathf.Pow(delta.x,2)+Mathf.Pow(delta.z,2)));
 			}
 
 			var bearing = (Vector3)dest - this.transform.position;

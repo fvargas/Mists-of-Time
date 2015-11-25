@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-public class GameManager : MonoBehaviour {
+public class GameManager : NetworkBehaviour {
 	public GroupManager gm;
 	public GameObject [] prefabs;
 	public static bool chasing_on = true;
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour {
 	public float flip_map_interval = 0.8f;
 	private Text status_txt;
 	public float freeze_timer = 0f;
-	
+    
 	private Hashtable gos = new Hashtable();
 	public int player_state;
 	public AudioClip hit_clip;
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour {
 	};
 	// Use this for initialization
 	void Start () {
-		player_state = 0;
+		//player_state = 0;
 		//Debug.Log (GameObject.Find ("magic_archer"));
 		//Debug.Log (player_movement);
 		/*Component [] comps = GameObject.Find ("mon05 (2)").GetComponents(typeof(Component));
@@ -71,18 +72,17 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void registerCharacter(GameObject obj, int state) {
-		gos [obj] = state;
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            go.GetComponent<PlayerControl>().gos[obj] = state;
+        }
 	}
 
-	public void timeTravel(GameObject obj, int state) {
-		gos [obj] = state;
-		obj.GetComponent<Movement> ().doTimeTravel (state);
+	
 
-	}
-
-	public int getPlayerState(){
-		return player_state;
-	}
+    //public int getPlayerState(){
+    //    return player_state;
+    //}
 
 	public static void setMark(Vector3 r) {
 		GameObject go = Instantiate(Resources.Load("book") as GameObject);
@@ -129,9 +129,9 @@ public class GameManager : MonoBehaviour {
 			m.registerGridGameObject (new_go);
 		}
 	}
-	public bool switchState(int center_row,int center_col){
+	public int switchState(int center_row,int center_col, int player_state){
 		if (center_row < 0 || center_row >= m.getNRows () || center_col < 0 || center_col >= m.getNCols ())
-			return false;
+			return player_state;
 		int next_player_state = (player_state + 1) % m.getNStates();
 		int [,,] current_grid = m.getLevel () [player_state];
 		int [,,] next_grid = m.getLevel () [next_player_state];
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour {
 			Destroy (warning_tile.GetComponent<Rigidbody>());
 			Destroy (warning_tile.GetComponent<BoxCollider>());
 			warning_tile.GetComponent<TileControl> ().destroy (0.5f, -0.5f,true);
-			return false;
+			return player_state;
 		} else {
 			float flip_tile_interval = flip_map_interval / (m.getNRows () + m.getNCols ());
 			for (int row=0; row<m.getNRows(); row++) {
@@ -159,15 +159,7 @@ public class GameManager : MonoBehaviour {
 			current_flips += 1;
 			player_state = next_player_state;
 
-			/* Adjust Enemies */
-			foreach (DictionaryEntry de in gos) {
-				if ((int)de.Value == player_state) {
-					((GameObject)de.Key).GetComponent<Movement>().displayOnMap(true);
-				} else {
-					((GameObject)de.Key).GetComponent<Movement>().displayOnMap(false);
-				}
-			}
-			return true;
+			return player_state;
 		}
 	}
 
@@ -217,6 +209,9 @@ public class GameManager : MonoBehaviour {
 		if (current_interval > interval) {
 			current_interval = 0f;
 			//switchState(1,1);
+		}
+		if (m.getRowNumber (GameObject.Find ("player(Clone)").transform.position.x) == 14 && m.getColNumber (GameObject.Find ("player(Clone)").transform.position.z) == 16) {
+			GameObject.Find("Status_Txt").GetComponent<Text>().text = "You Win!";
 		}
 	}
 }
