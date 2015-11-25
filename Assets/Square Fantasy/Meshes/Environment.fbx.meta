@@ -1,0 +1,527 @@
+fileFormatVersion: 2
+guid: bc80c73afeec2324c91a8f8949dfa182
+labels:
+- Mesh
+timeCreated: 1442822890
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Arc
+    100002: Barrel0
+    100004: Barrel1
+    100006: Bridge
+    100008: Bush0
+    100010: Bush1
+    100012: Column0
+    100014: Column1
+    100016: Container0
+    100018: Container1
+    100020: Crate0
+    100022: Crate1
+    100024: Empy Tree
+    100026: //RootNode
+    100028: Fence0
+    100030: Fence1
+    100032: Grass Border Corner
+    100034: Grass Border Corner (2)
+    100036: Grass Tile (1x1)
+    100038: Grass Tile (2x2)
+    100040: Grass Tile (4x4)
+    100042: Grass Tile Border (1x1)
+    100044: Grass Tile Border (2x2)
+    100046: Grass Tile Border (4x4)
+    100048: Grass Tile Bottom (1x1)
+    100050: Grass Tile Bottom (2x2)
+    100052: Grass Tile Bottom (4x4)
+    100054: Grass Tile Diagonal (1x1)
+    100056: Grass Tile Diagonal (2x1)
+    100058: Grass Tile Diagonal Bottom (2x1)
+    100060: Grass Tile Diagonal Bottom(1x1)
+    100062: Hollow Tree
+    100064: House0
+    100066: House1
+    100068: Ladder
+    100070: Log
+    100072: Mud Border Corner
+    100074: Mud Border Corner (2)
+    100076: Mud Tile (1x1)
+    100078: Mud Tile (2x2)
+    100080: Mud Tile (4x4)
+    100082: Mud Tile Border (1x1)
+    100084: Mud Tile Border (2x2)
+    100086: Mud Tile Border (4x4)
+    100088: Mud Tile Bottom (1x1)
+    100090: Mud Tile Bottom (2x2)
+    100092: Mud Tile Bottom (4x4)
+    100094: Mud Tile Diagonal (1x1)
+    100096: Mud Tile Diagonal (2x1)
+    100098: Mud Tile Diagonal Bottom (2x1)
+    100100: Mud Tile Diagonal Bottom(1x1)
+    100102: Plant0
+    100104: Plant1
+    100106: Road
+    100108: Road End
+    100110: Road Sign
+    100112: Road Turn
+    100114: Rock Border Corner
+    100116: Rock Border Corner (2)
+    100118: Rock Tile (1x1)
+    100120: Rock Tile (2x2)
+    100122: Rock Tile (4x4)
+    100124: Rock Tile Border (1x1)
+    100126: Rock Tile Border (2x2)
+    100128: Rock Tile Border (4x4)
+    100130: Rock Tile Bottom (1x1)
+    100132: Rock Tile Bottom (2x2)
+    100134: Rock Tile Bottom (4x4)
+    100136: Rock Tile Diagonal (1x1)
+    100138: Rock Tile Diagonal (2x1)
+    100140: Rock Tile Diagonal Bottom (2x1)
+    100142: Rock Tile Diagonal Bottom(1x1)
+    100144: Rock0
+    100146: Rock1
+    100148: Rock2
+    100150: Rock3
+    100152: Stall
+    100154: Tree0
+    100156: Tree1
+    100158: Tree2
+    100160: Wagon0
+    100162: Wagon1
+    100164: Wall0
+    100166: Wall1
+    100168: Water Tile (1x1)
+    100170: Water Tile (2x2)
+    100172: Water Tile (4x4)
+    100174: Water Tile Bottom (1x1)
+    100176: Water Tile Bottom (2x2)
+    100178: Water Tile Bottom (4x4)
+    100180: Well
+    400000: Arc
+    400002: Barrel0
+    400004: Barrel1
+    400006: Bridge
+    400008: Bush0
+    400010: Bush1
+    400012: Column0
+    400014: Column1
+    400016: Container0
+    400018: Container1
+    400020: Crate0
+    400022: Crate1
+    400024: Empy Tree
+    400026: //RootNode
+    400028: Fence0
+    400030: Fence1
+    400032: Grass Border Corner
+    400034: Grass Border Corner (2)
+    400036: Grass Tile (1x1)
+    400038: Grass Tile (2x2)
+    400040: Grass Tile (4x4)
+    400042: Grass Tile Border (1x1)
+    400044: Grass Tile Border (2x2)
+    400046: Grass Tile Border (4x4)
+    400048: Grass Tile Bottom (1x1)
+    400050: Grass Tile Bottom (2x2)
+    400052: Grass Tile Bottom (4x4)
+    400054: Grass Tile Diagonal (1x1)
+    400056: Grass Tile Diagonal (2x1)
+    400058: Grass Tile Diagonal Bottom (2x1)
+    400060: Grass Tile Diagonal Bottom(1x1)
+    400062: Hollow Tree
+    400064: House0
+    400066: House1
+    400068: Ladder
+    400070: Log
+    400072: Mud Border Corner
+    400074: Mud Border Corner (2)
+    400076: Mud Tile (1x1)
+    400078: Mud Tile (2x2)
+    400080: Mud Tile (4x4)
+    400082: Mud Tile Border (1x1)
+    400084: Mud Tile Border (2x2)
+    400086: Mud Tile Border (4x4)
+    400088: Mud Tile Bottom (1x1)
+    400090: Mud Tile Bottom (2x2)
+    400092: Mud Tile Bottom (4x4)
+    400094: Mud Tile Diagonal (1x1)
+    400096: Mud Tile Diagonal (2x1)
+    400098: Mud Tile Diagonal Bottom (2x1)
+    400100: Mud Tile Diagonal Bottom(1x1)
+    400102: Plant0
+    400104: Plant1
+    400106: Road
+    400108: Road End
+    400110: Road Sign
+    400112: Road Turn
+    400114: Rock Border Corner
+    400116: Rock Border Corner (2)
+    400118: Rock Tile (1x1)
+    400120: Rock Tile (2x2)
+    400122: Rock Tile (4x4)
+    400124: Rock Tile Border (1x1)
+    400126: Rock Tile Border (2x2)
+    400128: Rock Tile Border (4x4)
+    400130: Rock Tile Bottom (1x1)
+    400132: Rock Tile Bottom (2x2)
+    400134: Rock Tile Bottom (4x4)
+    400136: Rock Tile Diagonal (1x1)
+    400138: Rock Tile Diagonal (2x1)
+    400140: Rock Tile Diagonal Bottom (2x1)
+    400142: Rock Tile Diagonal Bottom(1x1)
+    400144: Rock0
+    400146: Rock1
+    400148: Rock2
+    400150: Rock3
+    400152: Stall
+    400154: Tree0
+    400156: Tree1
+    400158: Tree2
+    400160: Wagon0
+    400162: Wagon1
+    400164: Wall0
+    400166: Wall1
+    400168: Water Tile (1x1)
+    400170: Water Tile (2x2)
+    400172: Water Tile (4x4)
+    400174: Water Tile Bottom (1x1)
+    400176: Water Tile Bottom (2x2)
+    400178: Water Tile Bottom (4x4)
+    400180: Well
+    2300000: Arc
+    2300002: Barrel0
+    2300004: Barrel1
+    2300006: Bridge
+    2300008: Bush0
+    2300010: Bush1
+    2300012: Column0
+    2300014: Column1
+    2300016: Container0
+    2300018: Container1
+    2300020: Crate0
+    2300022: Crate1
+    2300024: Empy Tree
+    2300026: Fence0
+    2300028: Fence1
+    2300030: Grass Border Corner
+    2300032: Grass Border Corner (2)
+    2300034: Grass Tile (1x1)
+    2300036: Grass Tile (2x2)
+    2300038: Grass Tile (4x4)
+    2300040: Grass Tile Border (1x1)
+    2300042: Grass Tile Border (2x2)
+    2300044: Grass Tile Border (4x4)
+    2300046: Grass Tile Bottom (1x1)
+    2300048: Grass Tile Bottom (2x2)
+    2300050: Grass Tile Bottom (4x4)
+    2300052: Grass Tile Diagonal (1x1)
+    2300054: Grass Tile Diagonal (2x1)
+    2300056: Grass Tile Diagonal Bottom (2x1)
+    2300058: Grass Tile Diagonal Bottom(1x1)
+    2300060: Hollow Tree
+    2300062: House0
+    2300064: House1
+    2300066: Ladder
+    2300068: Log
+    2300070: Mud Border Corner
+    2300072: Mud Border Corner (2)
+    2300074: Mud Tile (1x1)
+    2300076: Mud Tile (2x2)
+    2300078: Mud Tile (4x4)
+    2300080: Mud Tile Border (1x1)
+    2300082: Mud Tile Border (2x2)
+    2300084: Mud Tile Border (4x4)
+    2300086: Mud Tile Bottom (1x1)
+    2300088: Mud Tile Bottom (2x2)
+    2300090: Mud Tile Bottom (4x4)
+    2300092: Mud Tile Diagonal (1x1)
+    2300094: Mud Tile Diagonal (2x1)
+    2300096: Mud Tile Diagonal Bottom (2x1)
+    2300098: Mud Tile Diagonal Bottom(1x1)
+    2300100: Plant0
+    2300102: Plant1
+    2300104: Road
+    2300106: Road End
+    2300108: Road Sign
+    2300110: Road Turn
+    2300112: Rock Border Corner
+    2300114: Rock Border Corner (2)
+    2300116: Rock Tile (1x1)
+    2300118: Rock Tile (2x2)
+    2300120: Rock Tile (4x4)
+    2300122: Rock Tile Border (1x1)
+    2300124: Rock Tile Border (2x2)
+    2300126: Rock Tile Border (4x4)
+    2300128: Rock Tile Bottom (1x1)
+    2300130: Rock Tile Bottom (2x2)
+    2300132: Rock Tile Bottom (4x4)
+    2300134: Rock Tile Diagonal (1x1)
+    2300136: Rock Tile Diagonal (2x1)
+    2300138: Rock Tile Diagonal Bottom (2x1)
+    2300140: Rock Tile Diagonal Bottom(1x1)
+    2300142: Rock0
+    2300144: Rock1
+    2300146: Rock2
+    2300148: Rock3
+    2300150: Stall
+    2300152: Tree0
+    2300154: Tree1
+    2300156: Tree2
+    2300158: Wagon0
+    2300160: Wagon1
+    2300162: Wall0
+    2300164: Wall1
+    2300166: Water Tile (1x1)
+    2300168: Water Tile (2x2)
+    2300170: Water Tile (4x4)
+    2300172: Water Tile Bottom (1x1)
+    2300174: Water Tile Bottom (2x2)
+    2300176: Water Tile Bottom (4x4)
+    2300178: Well
+    3300000: Arc
+    3300002: Barrel0
+    3300004: Barrel1
+    3300006: Bridge
+    3300008: Bush0
+    3300010: Bush1
+    3300012: Column0
+    3300014: Column1
+    3300016: Container0
+    3300018: Container1
+    3300020: Crate0
+    3300022: Crate1
+    3300024: Empy Tree
+    3300026: Fence0
+    3300028: Fence1
+    3300030: Grass Border Corner
+    3300032: Grass Border Corner (2)
+    3300034: Grass Tile (1x1)
+    3300036: Grass Tile (2x2)
+    3300038: Grass Tile (4x4)
+    3300040: Grass Tile Border (1x1)
+    3300042: Grass Tile Border (2x2)
+    3300044: Grass Tile Border (4x4)
+    3300046: Grass Tile Bottom (1x1)
+    3300048: Grass Tile Bottom (2x2)
+    3300050: Grass Tile Bottom (4x4)
+    3300052: Grass Tile Diagonal (1x1)
+    3300054: Grass Tile Diagonal (2x1)
+    3300056: Grass Tile Diagonal Bottom (2x1)
+    3300058: Grass Tile Diagonal Bottom(1x1)
+    3300060: Hollow Tree
+    3300062: House0
+    3300064: House1
+    3300066: Ladder
+    3300068: Log
+    3300070: Mud Border Corner
+    3300072: Mud Border Corner (2)
+    3300074: Mud Tile (1x1)
+    3300076: Mud Tile (2x2)
+    3300078: Mud Tile (4x4)
+    3300080: Mud Tile Border (1x1)
+    3300082: Mud Tile Border (2x2)
+    3300084: Mud Tile Border (4x4)
+    3300086: Mud Tile Bottom (1x1)
+    3300088: Mud Tile Bottom (2x2)
+    3300090: Mud Tile Bottom (4x4)
+    3300092: Mud Tile Diagonal (1x1)
+    3300094: Mud Tile Diagonal (2x1)
+    3300096: Mud Tile Diagonal Bottom (2x1)
+    3300098: Mud Tile Diagonal Bottom(1x1)
+    3300100: Plant0
+    3300102: Plant1
+    3300104: Road
+    3300106: Road End
+    3300108: Road Sign
+    3300110: Road Turn
+    3300112: Rock Border Corner
+    3300114: Rock Border Corner (2)
+    3300116: Rock Tile (1x1)
+    3300118: Rock Tile (2x2)
+    3300120: Rock Tile (4x4)
+    3300122: Rock Tile Border (1x1)
+    3300124: Rock Tile Border (2x2)
+    3300126: Rock Tile Border (4x4)
+    3300128: Rock Tile Bottom (1x1)
+    3300130: Rock Tile Bottom (2x2)
+    3300132: Rock Tile Bottom (4x4)
+    3300134: Rock Tile Diagonal (1x1)
+    3300136: Rock Tile Diagonal (2x1)
+    3300138: Rock Tile Diagonal Bottom (2x1)
+    3300140: Rock Tile Diagonal Bottom(1x1)
+    3300142: Rock0
+    3300144: Rock1
+    3300146: Rock2
+    3300148: Rock3
+    3300150: Stall
+    3300152: Tree0
+    3300154: Tree1
+    3300156: Tree2
+    3300158: Wagon0
+    3300160: Wagon1
+    3300162: Wall0
+    3300164: Wall1
+    3300166: Water Tile (1x1)
+    3300168: Water Tile (2x2)
+    3300170: Water Tile (4x4)
+    3300172: Water Tile Bottom (1x1)
+    3300174: Water Tile Bottom (2x2)
+    3300176: Water Tile Bottom (4x4)
+    3300178: Well
+    4300000: Water Tile Bottom (1x1)
+    4300002: Water Tile (1x1)
+    4300004: Grass Tile (1x1)
+    4300006: Grass Tile Diagonal (2x1)
+    4300008: Grass Tile (2x2)
+    4300010: Grass Border Corner
+    4300012: Mud Tile (2x2)
+    4300014: Fence0
+    4300016: Bush1
+    4300018: Arc
+    4300020: Ladder
+    4300022: Well
+    4300024: Water Tile Bottom (4x4)
+    4300026: Grass Tile Diagonal Bottom(1x1)
+    4300028: Grass Tile Bottom (1x1)
+    4300030: Rock1
+    4300032: Rock2
+    4300034: Plant1
+    4300036: Container1
+    4300038: Grass Tile (4x4)
+    4300040: Rock Tile Diagonal (2x1)
+    4300042: Road Sign
+    4300044: Rock0
+    4300046: Road
+    4300048: Plant0
+    4300050: Bush0
+    4300052: Log
+    4300054: Grass Tile Bottom (2x2)
+    4300056: Rock Tile Bottom (4x4)
+    4300058: Wall0
+    4300060: Tree1
+    4300062: Container0
+    4300064: Grass Tile Diagonal (1x1)
+    4300066: Rock Tile Border (2x2)
+    4300068: Mud Tile Diagonal (2x1)
+    4300070: Mud Tile Bottom (2x2)
+    4300072: House0
+    4300074: Fence1
+    4300076: Mud Tile (1x1)
+    4300078: Mud Tile Diagonal Bottom(1x1)
+    4300080: Road Turn
+    4300082: Wall1
+    4300084: Column0
+    4300086: Tree0
+    4300088: Water Tile (4x4)
+    4300090: Rock Border Corner
+    4300092: Mud Tile Diagonal Bottom (2x1)
+    4300094: Mud Tile Border (1x1)
+    4300096: House1
+    4300098: Wagon1
+    4300100: Empy Tree
+    4300102: Stall
+    4300104: Crate0
+    4300106: Water Tile Bottom (2x2)
+    4300108: Mud Border Corner
+    4300110: Rock Border Corner (2)
+    4300112: Rock Tile (2x2)
+    4300114: Rock3
+    4300116: Road End
+    4300118: Barrel1
+    4300120: Grass Border Corner (2)
+    4300122: Grass Tile Bottom (4x4)
+    4300124: Grass Tile Border (4x4)
+    4300126: Rock Tile Diagonal Bottom (2x1)
+    4300128: Rock Tile Border (1x1)
+    4300130: Rock Tile Border (4x4)
+    4300132: Wagon0
+    4300134: Grass Tile Border (2x2)
+    4300136: Rock Tile (1x1)
+    4300138: Rock Tile Diagonal (1x1)
+    4300140: Mud Border Corner (2)
+    4300142: Mud Tile (4x4)
+    4300144: Barrel0
+    4300146: Grass Tile Diagonal Bottom (2x1)
+    4300148: Grass Tile Border (1x1)
+    4300150: Rock Tile Diagonal Bottom(1x1)
+    4300152: Mud Tile Bottom (1x1)
+    4300154: Mud Tile Bottom (4x4)
+    4300156: Column1
+    4300158: Water Tile (2x2)
+    4300160: Rock Tile (4x4)
+    4300162: Rock Tile Bottom (1x1)
+    4300164: Rock Tile Bottom (2x2)
+    4300166: Mud Tile Border (2x2)
+    4300168: Mud Tile Diagonal (1x1)
+    4300170: Mud Tile Border (4x4)
+    4300172: Bridge
+    4300174: Tree2
+    4300176: Hollow Tree
+    4300178: Crate1
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

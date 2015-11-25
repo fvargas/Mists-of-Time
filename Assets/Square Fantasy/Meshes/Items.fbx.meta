@@ -1,0 +1,152 @@
+fileFormatVersion: 2
+guid: cb03eeaa67811dd4596374004912c95b
+labels:
+- Mesh
+timeCreated: 1442822899
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Armor
+    100002: Book
+    100004: Bow
+    100006: Chest
+    100008: Coin0
+    100010: Coin1
+    100012: Crystal
+    100014: Helmet
+    100016: //RootNode
+    100018: Jewel
+    100020: Potion0
+    100022: Potion1
+    100024: Potion2
+    100026: Shield
+    100028: Staff
+    100030: Sword
+    400000: Armor
+    400002: Book
+    400004: Bow
+    400006: Chest
+    400008: Coin0
+    400010: Coin1
+    400012: Crystal
+    400014: Helmet
+    400016: //RootNode
+    400018: Jewel
+    400020: Potion0
+    400022: Potion1
+    400024: Potion2
+    400026: Shield
+    400028: Staff
+    400030: Sword
+    2300000: Armor
+    2300002: Book
+    2300004: Bow
+    2300006: Chest
+    2300008: Coin0
+    2300010: Coin1
+    2300012: Crystal
+    2300014: Helmet
+    2300016: Jewel
+    2300018: Potion0
+    2300020: Potion1
+    2300022: Potion2
+    2300024: Shield
+    2300026: Staff
+    2300028: Sword
+    3300000: Armor
+    3300002: Book
+    3300004: Bow
+    3300006: Chest
+    3300008: Coin0
+    3300010: Coin1
+    3300012: Crystal
+    3300014: Helmet
+    3300016: Jewel
+    3300018: Potion0
+    3300020: Potion1
+    3300022: Potion2
+    3300024: Shield
+    3300026: Staff
+    3300028: Sword
+    4300000: Coin0
+    4300002: Coin1
+    4300004: Jewel
+    4300006: Book
+    4300008: Potion1
+    4300010: Bow
+    4300012: Armor
+    4300014: Sword
+    4300016: Potion2
+    4300018: Crystal
+    4300020: Shield
+    4300022: Helmet
+    4300024: Chest
+    4300026: Staff
+    4300028: Potion0
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

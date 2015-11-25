@@ -1,0 +1,202 @@
+fileFormatVersion: 2
+guid: 8b65f960050a86944bb0e925976df29c
+labels:
+- Mesh
+timeCreated: 1442824959
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Chicken
+    100004: Dragon
+    100006: Hand0
+    100008: Hand0 (2)
+    100010: Hand1
+    100012: Hand1 (2)
+    100014: LeftLeg
+    100016: Leg0
+    100018: Leg0 (2)
+    100020: Leg0 (3)
+    100022: Leg0 (4)
+    100024: Leg1
+    100026: Leg1 (2)
+    100028: Leg1 (3)
+    100030: Leg1 (4)
+    100032: Leg2
+    100034: Leg2 (2)
+    100036: Leg3
+    100038: Leg3 (2)
+    100040: Mage
+    100042: RightLeg
+    100044: Sheep
+    100046: Warrior
+    100048: Wing0
+    100050: Wing1
+    400000: //RootNode
+    400002: Chicken
+    400004: Dragon
+    400006: Hand0
+    400008: Hand0 (2)
+    400010: Hand1
+    400012: Hand1 (2)
+    400014: LeftLeg
+    400016: Leg0
+    400018: Leg0 (2)
+    400020: Leg0 (3)
+    400022: Leg0 (4)
+    400024: Leg1
+    400026: Leg1 (2)
+    400028: Leg1 (3)
+    400030: Leg1 (4)
+    400032: Leg2
+    400034: Leg2 (2)
+    400036: Leg3
+    400038: Leg3 (2)
+    400040: Mage
+    400042: RightLeg
+    400044: Sheep
+    400046: Warrior
+    400048: Wing0
+    400050: Wing1
+    2300000: Chicken
+    2300002: Dragon
+    2300004: Hand0
+    2300006: Hand0 (2)
+    2300008: Hand1
+    2300010: Hand1 (2)
+    2300012: LeftLeg
+    2300014: Leg0
+    2300016: Leg0 (2)
+    2300018: Leg0 (3)
+    2300020: Leg0 (4)
+    2300022: Leg1
+    2300024: Leg1 (2)
+    2300026: Leg1 (3)
+    2300028: Leg1 (4)
+    2300030: Leg2
+    2300032: Leg2 (2)
+    2300034: Leg3
+    2300036: Leg3 (2)
+    2300038: Mage
+    2300040: RightLeg
+    2300042: Sheep
+    2300044: Warrior
+    2300046: Wing0
+    2300048: Wing1
+    3300000: Chicken
+    3300002: Dragon
+    3300004: Hand0
+    3300006: Hand0 (2)
+    3300008: Hand1
+    3300010: Hand1 (2)
+    3300012: LeftLeg
+    3300014: Leg0
+    3300016: Leg0 (2)
+    3300018: Leg0 (3)
+    3300020: Leg0 (4)
+    3300022: Leg1
+    3300024: Leg1 (2)
+    3300026: Leg1 (3)
+    3300028: Leg1 (4)
+    3300030: Leg2
+    3300032: Leg2 (2)
+    3300034: Leg3
+    3300036: Leg3 (2)
+    3300038: Mage
+    3300040: RightLeg
+    3300042: Sheep
+    3300044: Warrior
+    3300046: Wing0
+    3300048: Wing1
+    4300000: Sheep
+    4300002: Leg0 (2)
+    4300004: Leg3
+    4300006: Leg1 (2)
+    4300008: Leg2
+    4300010: Chicken
+    4300012: RightLeg
+    4300014: LeftLeg
+    4300016: Mage
+    4300018: Hand0
+    4300020: Leg1 (3)
+    4300022: Hand1
+    4300024: Leg0
+    4300026: Warrior
+    4300028: Hand0 (2)
+    4300030: Leg1
+    4300032: Hand1 (2)
+    4300034: Leg0 (4)
+    4300036: Dragon
+    4300038: Wing0
+    4300040: Leg2 (2)
+    4300042: Wing1
+    4300044: Leg1 (4)
+    4300046: Leg0 (3)
+    4300048: Leg3 (2)
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
