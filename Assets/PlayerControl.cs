@@ -62,7 +62,6 @@ public class PlayerControl : NetworkBehaviour
             }
             else
             {
-
                 current_acceleration = max_accel;
                 current_speed += current_acceleration * Time.deltaTime;
             }
@@ -189,13 +188,14 @@ public class PlayerControl : NetworkBehaviour
 
     public void timeTravel(GameObject obj, int state)
     {
-        Debug.Log(state);
+        //Debug.Log(state+","+player_state);
         gos[obj] = state;
+		obj.GetComponent<EffectControl>().showParticleEffect("holy",1);
+		obj.GetComponent<Movement>().time_travel_timer = 1f;
         //int current_state = obj.GetComponent<PlayerControl>().player_state;
         foreach (DictionaryEntry de in gos)
         {
-			((GameObject)de.Key).GetComponent<EffectControl>().showParticleEffect("holy",1);
-			((GameObject)de.Key).GetComponent<Movement>().time_travel_timer = 1f;
+			//Debug.Log(de.Key+" "+de.Value);
             if ((int)de.Value == player_state)
             {
                 foreach (Renderer r in ((GameObject)de.Key).GetComponentsInChildren<Renderer>())

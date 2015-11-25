@@ -72,10 +72,19 @@ public class GameManager : NetworkBehaviour {
 	}
 
 	public void registerCharacter(GameObject obj, int state) {
+		//Debug.Log ("---------START------------");
+		//Debug.Log ("Registering ->   " + obj);
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
         {
-            go.GetComponent<PlayerControl>().gos[obj] = state;
+			//Debug.Log("Player:"+go);
+			if (go != obj) {
+				//Debug.Log ("Registered with player ->   " + go);
+				//Debug.Log(go.GetComponent<PlayerControl>());
+				//Debug.Log(go.GetComponent<PlayerControl>().gos);
+	            go.GetComponent<PlayerControl>().gos[obj] = state;
+			}
         }
+		//Debug.Log ("---------END------------");
 	}
 
 	

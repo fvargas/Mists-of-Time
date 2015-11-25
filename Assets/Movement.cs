@@ -67,29 +67,31 @@ public class Movement : NetworkBehaviour
         }
 
 		game_manager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-		game_manager.registerCharacter (gameObject, current_state);
+		//
 		gm = game_manager.gm;
 		m = game_manager.m;
 		Vector3 pos = this.transform.position;
 		prev_location = new Vector4 (pos.x, pos.y, pos.z, 0);
-		if (!isPlayer) {
-			m.updateInfluenceMap (new Vector4 (0, 0, 0, -1), prev_location, strength);
-		}
+
 
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;
         wander_dest.z = transform.position.z;
         target_go = null;
 
-		if (behav == "Chase") {
-			Vector3 my_pos = this.transform.position;
-			target_path = PathPlanning.Plan (new Vector4(my_pos.x, my_pos.y, my_pos.z, current_state), prev_target_loc, m, strength);
-		}
+
 		anim = GetComponent<Animator>();
 		controller = GetComponent<CharacterController>();
 		prev_anim_speed = anim.speed;
 		next_row = m.getRowNumber(this.transform.position.x);
 		next_col = m.getColNumber(this.transform.position.z);
+		if (behav == "Chase") {
+			Vector3 my_pos = this.transform.position;
+			target_path = PathPlanning.Plan (new Vector4(my_pos.x, my_pos.y, my_pos.z, current_state), prev_target_loc, m, strength);
+		}
+		if (!isPlayer) {
+			m.updateInfluenceMap (new Vector4 (0, 0, 0, -1), prev_location, strength);
+		}
     }
 
     // Update is called once per frame
@@ -117,6 +119,7 @@ public class Movement : NetworkBehaviour
                 Vector3 tpos = target_go.transform.position;
                 //prev_target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
                 prev_target_loc = new Vector4(tpos.x, tpos.y, tpos.z, target_go.GetComponent<PlayerControl>().player_state);
+				game_manager.registerCharacter (gameObject, current_state);
             }
             else
             {
