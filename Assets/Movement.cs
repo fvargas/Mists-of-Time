@@ -261,12 +261,13 @@ public class Movement : NetworkBehaviour
 	public void doTimeTravel(int state){
 		current_state = state;
 		this.GetComponent<EffectControl>().showParticleEffect("holy",1);
+		time_travel_timer = 1f;
 		if (current_state == game_manager.getPlayerState()) {
 			displayOnMap(true);
 		} else {
 			displayOnMap(false);
 		}
-		time_travel_timer = 1f;
+
 	}*/
 
 	public void jump(int direction){
