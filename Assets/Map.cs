@@ -24,6 +24,15 @@ public class Map {
 	public static int GO_MUD = 7;
 	public static int GO_PATH = 8;
 
+	private static readonly int[,] Matrix2D = {
+		{ 1, 7, 15, 7, 1 },
+		{ 7, 30, 60, 30, 7 },
+		{ 15, 60, 100, 60, 15 },
+		{ 7, 30, 60, 30, 7 },
+		{ 1, 7, 15, 7, 1 },
+	};
+	private static readonly int MATRIX_2D_OFFSET = Matrix2D.GetLength(0) / 2;
+
 	public static readonly Dictionary<string, int> TAG_TYPE_DICT = new Dictionary<string, int>
 	{
 		{ "GO_LAVA", GO_LAVA },
@@ -184,112 +193,29 @@ public class Map {
 
 	public static void subtractInfluenceMap(Vector4 loc, int weight, int[][,,] inf_map)
 	{
-		Vector4 new_loc;
+		subtractInfluence3D (loc, weight, inf_map, (int)loc.w);
 
-		// Top row of 5x5 convolution
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 1 * weight, inf_map);
-		}
-		new_loc = new Vector4 (loc.x - 2, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 3 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 1 * weight, inf_map);
+		int numStates = inf_map.Length;
+		if (numStates >= 2) {
+			int w = ((int)loc.w + 1) % numStates;
+			subtractInfluence3D (loc, weight, inf_map, w);
 		}
 
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
+		if (inf_map.Length >= 3) {
+			int w = ((int)loc.w - 1 + numStates) % numStates;
+			subtractInfluence3D (loc, weight, inf_map, w);
 		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
-		}
+	}
 
-		new_loc = new Vector4(loc.x, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 3 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 6 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 3 * weight, inf_map);
-		}
-
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
-		}
-
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 1 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 3 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			subtractLocation(new_loc, 1 * weight, inf_map);
+	private static void subtractInfluence3D(Vector4 loc, int weight, int [][,,] inf_map, int w)
+	{
+		for (int x_offset = -2; x_offset <= 2; x_offset++) {
+			for (int z_offset = -2; z_offset <= 2; z_offset++) {
+				Vector4 new_loc = new Vector4(loc.x + x_offset, loc.y, loc.z + z_offset, w);
+				if (isInInfMap(new_loc, inf_map)) {
+					subtractLocation(new_loc, Matrix2D[x_offset + MATRIX_2D_OFFSET, z_offset + MATRIX_2D_OFFSET] * weight, inf_map);
+				}
+			}
 		}
 	}
 
@@ -298,114 +224,32 @@ public class Map {
 		inf_map [(int)loc.w] [(int)loc.y, (int)loc.x, (int)loc.z] -= value;
 	}
 
+
 	private void addToInfluenceMap(Vector4 loc, int weight, int[][,,] inf_map)
 	{
-		Vector4 new_loc;
-		
-		// Top row of 5x5 convolution
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 1 * weight, inf_map);
-		}
-		new_loc = new Vector4 (loc.x - 2, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 3 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 2, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 1 * weight, inf_map);
+		addToInfluence3D (loc, weight, inf_map, (int)loc.w);
+
+		int numStates = inf_map.Length;
+		if (numStates >= 2) {
+			int w = ((int)loc.w + 1) % numStates;
+			addToInfluence3D (loc, weight, inf_map, w);
 		}
 		
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
+		if (inf_map.Length >= 3) {
+			int w = ((int)loc.w - 1 + numStates) % numStates;
+			addToInfluence3D (loc, weight, inf_map, w);
 		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x - 1, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
-		}
-		
-		new_loc = new Vector4(loc.x, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 3 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 6 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 3 * weight, inf_map);
-		}
-		
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 5 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 4 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 1, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
-		}
-		
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z - 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 1 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z - 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 3 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z + 1, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 2 * weight, inf_map);
-		}
-		new_loc = new Vector4(loc.x + 2, loc.y, loc.z + 2, loc.w);
-		if (isInInfMap(new_loc, inf_map)) {
-			addToLocation(new_loc, 1 * weight, inf_map);
+	}
+
+	private void addToInfluence3D(Vector4 loc, int weight, int[][,,] inf_map, int w)
+	{
+		for (int x_offset = -2; x_offset <= 2; x_offset++) {
+			for (int z_offset = -2; z_offset <= 2; z_offset++) {
+				Vector4 new_loc = new Vector4(loc.x + x_offset, loc.y, loc.z + z_offset, w);
+				if (isInInfMap(new_loc, inf_map)) {
+					addToLocation(new_loc, Matrix2D[x_offset + MATRIX_2D_OFFSET, z_offset + MATRIX_2D_OFFSET] * weight, inf_map);
+				}
+			}
 		}
 	}
 

@@ -23,7 +23,7 @@ public class PathPlanning
 
 		int[][,,] inf_map = m.getInfluenceMapCopy ();
 		Map.subtractInfluenceMap(start, weight, inf_map);
-		
+
 		while (!pq.isEmpty())
 		{
 			Node n = pq.pop();

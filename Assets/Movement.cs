@@ -174,7 +174,7 @@ public class Movement : MonoBehaviour
 			current_interval += Time.deltaTime;
 			Vector3 tpos = target_go.transform.position;
 			Vector4 target_loc = new Vector4(tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
-			if (Vector4.Distance(prev_target_loc, target_loc) > 1.0 && current_interval > interval) {
+			if (current_interval > interval) {
 				current_interval = 0f;
 				prev_target_loc = target_loc;
 				Vector3 pos = this.transform.position;
