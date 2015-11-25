@@ -29,9 +29,9 @@ public class GameManager : MonoBehaviour {
 	public AudioClip hit_clip;
 	public static Dictionary<int, int> gridValueMap = new Dictionary<int, int>
 	{
-		{ Map.EMPTY, 1 },
-		{ Map.GO_LAVA, -1 },
-		{ Map.GO_ROCK, 1 },
+		{ 0, 1 },
+		{ 1, -1 },
+		{ 2, 1 },
 		{ Map.GO_DEST, 1 },
 		{ Map.GO_SAFE, -1 },
 		{ Map.GO_LADDER, 2 },
@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour {
 	public bool switchState(int center_row,int center_col){
 		if (center_row < 0 || center_row >= m.getNRows () || center_col < 0 || center_col >= m.getNCols ())
 			return false;
-		int next_player_state = (player_state + 1) % m.getNLevels();
+		int next_player_state = (player_state + 1) % m.getNStates();
 		int [,,] current_grid = m.getLevel () [player_state];
 		int [,,] next_grid = m.getLevel () [next_player_state];
 		int new_tile_type = next_grid [0, center_row, center_col];

@@ -195,7 +195,7 @@ public class PathPlanning
 		}
 
 		// Set of actions for time travel
-		int numLevels = m.getNLevels();
+		int numLevels = m.getNStates();
 		if (numLevels >= 2) {
 			int w = (n.w + 1) % numLevels;
 			if (isValid(n.x, n.y, n.z, w, visited,m))
@@ -239,7 +239,7 @@ public class PathPlanning
 		int numRows = m.getNRows();
 		int numCols = m.getNCols();
 		int numVers = m.getNVers();
-		int numLevels = m.getNLevels ();
+		int numLevels = m.getNStates ();
 		
 		bool squareInBounds = 0 <= w && w < numLevels && 0 <= x && x < numRows && 0 <= y && y < numVers && 0 <= z && z < numCols;
 		bool haveVisited = visited.Contains(new Vector4(x, y, z, w));

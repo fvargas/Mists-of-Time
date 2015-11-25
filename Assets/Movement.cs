@@ -23,6 +23,8 @@ public class Movement : MonoBehaviour
     public string enemyTag;
     public bool fleeing = false;
 	public int current_state;
+	private Vector4 prev_location;
+	public int strength = 4;
 
     public List<Vector4> target_path;
 	private Vector4 prev_target_loc;
@@ -66,7 +68,9 @@ public class Movement : MonoBehaviour
 		game_manager.registerCharacter (gameObject, current_state);
 		gm = game_manager.gm;
 		m = game_manager.m;
-		Debug.Log (m);
+		Vector3 pos = this.transform.position;
+		prev_location = new Vector4 (pos.x, pos.y, pos.z, 0);
+		m.updateInfluenceMap(new Vector4 (0, 0, 0, -1), prev_location, strength);
         wander_dest.x = transform.position.x;
         wander_dest.y = transform.position.y;
         wander_dest.z = transform.position.z;
@@ -76,8 +80,8 @@ public class Movement : MonoBehaviour
 		prev_target_loc = new Vector4 (tpos.x, tpos.y, tpos.z, game_manager.getPlayerState());
 
 		if (behav == "Chase") {
-			Vector3 pos = this.transform.position;
-			target_path = PathPlanning.Plan (new Vector4(pos.x, pos.y, pos.z, current_state), prev_target_loc,m);
+			Vector3 my_pos = this.transform.position;
+			target_path = PathPlanning.Plan (new Vector4(my_pos.x, my_pos.y, my_pos.z, current_state), prev_target_loc,m);
 		}
 		anim = GetComponent<Animator>();
 		controller = GetComponent<CharacterController>();
@@ -211,6 +215,8 @@ public class Movement : MonoBehaviour
 			Vector4 waypoint = Map.getCoordinates (target_path [0]);
 			if (ReachGoal (waypoint)) {
 				target_path.RemoveAt (0);
+				m.updateInfluenceMap(prev_location, waypoint, strength);
+				prev_location = waypoint;
 			}
 		}
 	}

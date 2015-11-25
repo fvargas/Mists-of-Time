@@ -8,6 +8,8 @@ class Level1
 
 	public static readonly int z = 20;
 
+	public static readonly int w = 3; // The number of states
+
 	public static readonly Dictionary<int, string> tileMapping = new Dictionary<int, string>
 	{
 		{ 0, "EMPTY" },
