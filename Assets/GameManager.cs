@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-public class GameManager : NetworkBehaviour {
+public class GameManager : MonoBehaviour {
 	public GroupManager gm;
 	public GameObject [] prefabs;
 	public static bool chasing_on = true;
@@ -219,7 +219,7 @@ public class GameManager : NetworkBehaviour {
 			current_interval = 0f;
 			//switchState(1,1);
 		}
-		if (m.getRowNumber (GameObject.Find ("player(Clone)").transform.position.x) == 14 && m.getColNumber (GameObject.Find ("player(Clone)").transform.position.z) == 16) {
+		if (m.getRowNumber (GameObject.Find ("player").transform.position.x) == 14 && m.getColNumber (GameObject.Find ("player").transform.position.z) == 16) {
 			GameObject.Find("Status_Txt").GetComponent<Text>().text = "You Win!";
 		}
 	}

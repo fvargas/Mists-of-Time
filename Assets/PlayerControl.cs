@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class PlayerControl : NetworkBehaviour
+public class PlayerControl : MonoBehaviour
 {
     private float current_speed = 0.0f;
     private float jump_speed = 0.0f;
@@ -125,8 +125,8 @@ public class PlayerControl : NetworkBehaviour
 			
 			if (Input.GetKey(KeyCode.Space) || UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetButtonDown("Jump"))
 			{
-				if (isLocalPlayer)
-                {
+				//if (isLocalPlayer)
+                //{
 					gm.freeze(1f);
 					int ver = m.getVerNumber(transform.position.y);
 					int row = m.getRowNumber(transform.position.x);
@@ -149,7 +149,7 @@ public class PlayerControl : NetworkBehaviour
 					}else{
 						sm.PlaySingle(time_travel_fail);
 					}
-				}
+				//}
 			}
             anim.SetFloat("Speed", Mathf.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z));
             //velocity.y -= 10f*Time.deltaTime;//TODO:replace hardcoded 40

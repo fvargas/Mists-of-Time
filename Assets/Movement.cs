@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Movement : NetworkBehaviour
+public class Movement : MonoBehaviour
 {
 
     private GameObject target_go;
@@ -113,7 +113,7 @@ public class Movement : NetworkBehaviour
 
         if (target_go == null)
         {
-            target_go = GameObject.Find("player(Clone)");
+            target_go = GameObject.Find("player");
             if (target_go != null)
             {
                 Vector3 tpos = target_go.transform.position;
