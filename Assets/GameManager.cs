@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour {
 		{ Map.GO_MUD, 256 },
 		{ Map.GO_PATH, 1 },
 	};
+
+	private GameObject player_go;
 	// Use this for initialization
 	void Start () {
 		//player_state = 0;
@@ -69,6 +71,15 @@ public class GameManager : MonoBehaviour {
 
 		//status_txt = GameObject.Find ("Status_Text").GetComponent<Text> ();
 		//status_txt.text = "HP:3";
+	}
+
+	public GameObject GetPlayer(){
+		if (player_go != null) {
+			return player_go;
+		} else {
+			player_go = GameObject.Find ("player");
+			return player_go;
+		}
 	}
 
 	public void registerCharacter(GameObject obj, int state) {

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
@@ -35,6 +36,14 @@ public class PlayerControl : MonoBehaviour
     CharacterController controller;
     public AudioClip time_travel_fail;
 
+
+	public float item_cooldown = 0;
+	public int [] items;
+	public List<ActiveItem> active_items;
+	private Text [] item_texts;
+	private Text current_potion_stat_text;
+
+
     // Use this for initialization
     void Start()
     {
@@ -45,11 +54,57 @@ public class PlayerControl : MonoBehaviour
         mv = GetComponent<Movement>();
         sm = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         player_state = 0;
+		items = new int[3];
+		for (int i=0; i<items.GetLength(0); i++) {
+			items[i] = Item.ITEM_EMPTY;
+		}
+		item_texts = new Text[3];
+		item_texts [0] = GameObject.Find ("Item_0_Txt").GetComponent<Text> ();
+		item_texts [1] = GameObject.Find ("Item_1_Txt").GetComponent<Text> ();
+		item_texts [2] = GameObject.Find ("Item_2_Txt").GetComponent<Text> ();
+		item_texts [0].text = item_texts [1].text = item_texts [2].text = Item.ITEM_NAME_DICT [Item.ITEM_EMPTY];
+		item_texts [0].color = item_texts [1].color = item_texts[2].color = Color.blue;
+		active_items = new List<ActiveItem> ();
+		current_potion_stat_text = GameObject.Find ("Potion_Stat_Txt").GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
+		if (gm.duringGame) {
+			// Item cooldown
+			if(item_cooldown > 0){
+				item_cooldown -= Time.deltaTime;
+				if(item_cooldown < 0)
+					item_cooldown = 0;
+				if(item_cooldown == 0){
+					for(int i=0;i<item_texts.GetLength(0);i++){
+						item_texts[i].color = Color.blue;
+					}
+				}else{
+					for(int i=0;i<item_texts.GetLength(0);i++){
+						item_texts[i].color = Color.red;
+					}
+				}
+
+			}
+
+			// Process active items
+			for (int i = active_items.Count-1; i >= 0; i--) {
+				ActiveItem ai = active_items[i];
+				if(ai.time_left > 0){
+					// TODO: Potion Effects Here
+					ai.time_left -= Time.deltaTime;
+					if(ai.time_left < 0){
+						ai.time_left = 0;
+					}
+					if(ai.time_left == 0){
+						active_items.RemoveAt(i);
+						UpdatePotionStatText();
+					}
+				}
+			}
+		}
         if (gm.duringGame && !gm.freezing())
         {
 
@@ -172,6 +227,15 @@ public class PlayerControl : MonoBehaviour
                 this.transform.position = new Vector3(2, 4, 2);
             }
 
+			//Item Control
+			if (Input.GetKey(KeyCode.Q)&&!Input.GetKey(KeyCode.E)){
+				ConsumeItem(0);
+			}else if(!Input.GetKey(KeyCode.Q)&&Input.GetKey(KeyCode.E)){
+				ConsumeItem(1);
+			}else if(Input.GetKey(KeyCode.Q)&&Input.GetKey(KeyCode.E)){
+				ConsumeItem(2);
+			}
+
         }
     }
 
@@ -220,4 +284,50 @@ public class PlayerControl : MonoBehaviour
             }
         }
     }
+
+	/* 
+	 * Return the index of the empty slot, if no empty slot then return -1
+	 */
+	public int GetNextAvailableItemSlot(){
+		int i = 0;
+		while (i < items.GetLength(0)) {
+			if(items[i] == Item.ITEM_EMPTY)
+				return i;
+			i += 1;
+		}
+		return -1;
+	}
+
+	public void PlaceItem(int slot_index,int item_id){
+		items [slot_index] = item_id;
+		item_texts [slot_index].text = Item.ITEM_NAME_DICT [item_id];
+	}
+
+	public void ConsumeItem(int slot_index){
+		if (items [slot_index] == Item.ITEM_EMPTY || item_cooldown > 0)
+			return;
+		if (items [slot_index] == Item.ITEM_FREEZE) {
+			Debug.Log ("FREEZE CONSUMED");
+		} else if (items [slot_index] == Item.ITEM_SPEEDUP) {
+			Debug.Log ("SPEEDUP CONSUMED");
+		} else if (items [slot_index] == Item.ITEM_SHIELD) {
+			Debug.Log ("SHIELD CONSUMED");
+		}
+		active_items.Add(new ActiveItem(items [slot_index]));
+		item_cooldown = Item.ITEM_COOLDOWN_DICT[items [slot_index]];
+		items[slot_index] = Item.ITEM_EMPTY;
+		item_texts [slot_index].text = Item.ITEM_NAME_DICT [Item.ITEM_EMPTY];
+		UpdatePotionStatText ();
+	}
+
+	private void UpdatePotionStatText(){
+		if (active_items.Count == 0) {
+			current_potion_stat_text.text = "";
+			return;
+		}
+		current_potion_stat_text.text = "|";
+		for (int i = active_items.Count-1; i >= 0; i--) {
+			current_potion_stat_text.text += " "+Item.ITEM_NAME_DICT[active_items[i].type]+" |";
+		}
+	}
 }
