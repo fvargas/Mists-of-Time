@@ -6,6 +6,12 @@ public class PathPlanning
 
 	public static List<Vector4> Plan (Vector4 start, Vector4 target, Map m, int weight)
 	{
+		// Don't bother path planning because the target is in a different time state
+		// and cannot be reached.
+		if (start.w != target.w) {
+			return new List<Vector4> ();
+		}
+
 		PQ pq = new PQ();
 		HashSet<Vector4> visited = new HashSet<Vector4>();
 		int target_x = m.getRowNumber(target.x);
