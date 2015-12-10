@@ -356,8 +356,6 @@ public class PlayerControl : MonoBehaviour
 	}
 
 	private void UpdatePotionStatText(){
-		//Debug.Log ("PotionTxt");
-		//Debug.Log (stun_timer);
 		if (active_items.Count == 0 && stun_timer == 0) {
 			current_potion_stat_text.text = "";
 			return;
