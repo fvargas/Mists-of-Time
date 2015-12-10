@@ -158,19 +158,19 @@ public class PlayerControl : MonoBehaviour
 				}
 				if (z_axis > 0 && (Mathf.Abs(z_axis) >= Mathf.Abs(x_axis)))
 				{
-					this.transform.LookAt(this.transform.position + new Vector3(1, 0, 0));
+					this.transform.LookAt(this.transform.position + new Vector3(-1, 0, 0));
 				}
 				else if (x_axis < 0 && (Mathf.Abs(x_axis) > Mathf.Abs(z_axis)))
 				{
-					this.transform.LookAt(this.transform.position + new Vector3(0, 0, 1));
+					this.transform.LookAt(this.transform.position + new Vector3(0, 0, -1));
 				}
 				else if (z_axis < 0 && (Mathf.Abs(z_axis) >= Mathf.Abs(x_axis)))
 				{
-					this.transform.LookAt(this.transform.position + new Vector3(-1, 0, 0));
+					this.transform.LookAt(this.transform.position + new Vector3(1, 0, 0));
 				}
 				else if (x_axis > 0 && (Mathf.Abs(x_axis) > Mathf.Abs(z_axis)))
 				{
-					this.transform.LookAt(this.transform.position + new Vector3(0, 0, -1));
+					this.transform.LookAt(this.transform.position + new Vector3(0, 0, 1));
 				}
 				if (x_axis != 0 || z_axis != 0){
 					velocity += (this.transform.forward * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
@@ -209,22 +209,24 @@ public class PlayerControl : MonoBehaviour
             anim.SetFloat("Speed", Mathf.Sqrt(velocity.x * velocity.x + velocity.z * velocity.z));
             //velocity.y -= 10f*Time.deltaTime;//TODO:replace hardcoded 40
             controller.Move(velocity);
-            if ((controller.collisionFlags & CollisionFlags.Sides) == 0)
-            {
-                if (controller.isGrounded)
-                {
-                    //Camera.main.transform.position += new Vector3(velocity.x, 0, velocity.z);
-                }
-                else
-                {
-                    //Camera.main.transform.position += velocity;
+            Vector3 temp_vec = Vector3.Lerp(Camera.main.transform.position, this.transform.position, 10);
+            Camera.main.transform.position = new Vector3(temp_vec.x + 10.0f, Camera.main.transform.position.y, temp_vec.z);
+            //if ((controller.collisionFlags & CollisionFlags.Sides) == 0)
+            //{
+            //    if (controller.isGrounded)
+            //    {
+            //        Camera.main.transform.position += new Vector3(velocity.x, 0, velocity.z);
+            //    }
+            //    else
+            //    {
+            //        Camera.main.transform.position += velocity;
 
-                }
-            }
+            //    }
+            //}
             if (this.transform.position.y < -20)
             {
                 currentJumps = 0;
-                this.transform.position = new Vector3(2, 4, 2);
+                this.transform.position = new Vector3(2, 0, 2);
             }
 
 			//Item Control
