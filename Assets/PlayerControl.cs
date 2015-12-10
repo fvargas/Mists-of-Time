@@ -223,10 +223,11 @@ public class PlayerControl : MonoBehaviour
 
             //    }
             //}
-            if (this.transform.position.y < -20)
+            if (this.transform.position.y < -15 || Input.GetKey(KeyCode.R))
             {
                 currentJumps = 0;
                 this.transform.position = new Vector3(2, 0, 2);
+                //respawn();
             }
 
 			//Item Control
