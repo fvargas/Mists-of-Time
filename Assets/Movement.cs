@@ -52,8 +52,10 @@ public class Movement : MonoBehaviour
 	public static int RIGHT = 4;
 
 	public float time_travel_timer;
+	private bool movable = true;
 
 	SoundManager sm;
+
     // Use this for initialization
     void Start()
     {
@@ -142,6 +144,11 @@ public class Movement : MonoBehaviour
 		if (anim.speed == 0) {
 			anim.speed = prev_anim_speed;
         }
+
+		/* Movable */
+		if (!movable) {
+			return;
+		}
 
 		/* Movement */
 
@@ -423,4 +430,14 @@ public class Movement : MonoBehaviour
         }
 		Debug.Log ("Just Planned");*/
 	}
+
+	public void BlockMovement(){
+		movable = false;
+	}
+
+	public void ResumeMovement(){
+		movable = true;
+	}
+
+
 }

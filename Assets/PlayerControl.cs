@@ -43,7 +43,10 @@ public class PlayerControl : MonoBehaviour
 	private Text [] item_texts;
 	private Text current_potion_stat_text;
 
+	public float stun_timer = 0f;
 
+	private float speed_boost = 0f;
+	public bool shield_on = false;
     // Use this for initialization
     void Start()
     {
@@ -90,10 +93,20 @@ public class PlayerControl : MonoBehaviour
 			}
 
 			// Process active items
+			speed_boost = 0f;
+			shield_on = false;
 			for (int i = active_items.Count-1; i >= 0; i--) {
 				ActiveItem ai = active_items[i];
 				if(ai.time_left > 0){
-					// TODO: Potion Effects Here
+					//Potion Effects
+
+					shield_on = false;
+					if(ai.type == Item.ITEM_SPEEDUP){
+						speed_boost += 2f;
+					}else if(ai.type == Item.ITEM_SHIELD){
+						shield_on = true;
+					}
+					//Update Potion
 					ai.time_left -= Time.deltaTime;
 					if(ai.time_left < 0){
 						ai.time_left = 0;
@@ -105,15 +118,25 @@ public class PlayerControl : MonoBehaviour
 				}
 			}
 		}
-        if (gm.duringGame && !gm.freezing())
+
+
+        if (gm.duringGame && !gm.freezingPlayer())
         {
+			if(stun_timer > 0){
+				stun_timer -= Time.deltaTime;
+				if(stun_timer < 0){
+					stun_timer = 0;
+				}
+				if(stun_timer == 0){
+					UpdatePotionStatText();
+				}
+			}
 
             if (!Input.anyKey)
             {
                 //current_speed = 0;
                 current_acceleration = -max_accel * 2;
                 current_speed += current_acceleration * Time.deltaTime;
-
             }
             else
             {
@@ -124,6 +147,12 @@ public class PlayerControl : MonoBehaviour
             {
                 current_speed = max_speed;
             }
+
+			/* Stun Effect */
+			if(stun_timer > 0 && current_speed > 1f){
+				current_speed = 1f;
+			}
+
             if (current_speed <= 0)
             {
                 current_speed = 0;
@@ -173,7 +202,7 @@ public class PlayerControl : MonoBehaviour
 					this.transform.LookAt(this.transform.position + new Vector3(0, 0, -1));
 				}
 				if (x_axis != 0 || z_axis != 0){
-					velocity += (this.transform.forward * (current_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
+					velocity += (this.transform.forward * ((current_speed+speed_boost) * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow(Time.deltaTime, 2)));
 				}
 
 			}
@@ -308,8 +337,10 @@ public class PlayerControl : MonoBehaviour
 			return;
 		if (items [slot_index] == Item.ITEM_FREEZE) {
 			Debug.Log ("FREEZE CONSUMED");
+			gm.freeze(2f,false);
 		} else if (items [slot_index] == Item.ITEM_SPEEDUP) {
 			Debug.Log ("SPEEDUP CONSUMED");
+			GetComponent<EffectControl>().showParticleEffect("wind",Item.ITEM_DURATION_DICT[items[slot_index]]);
 		} else if (items [slot_index] == Item.ITEM_SHIELD) {
 			Debug.Log ("SHIELD CONSUMED");
 		}
@@ -321,13 +352,24 @@ public class PlayerControl : MonoBehaviour
 	}
 
 	private void UpdatePotionStatText(){
-		if (active_items.Count == 0) {
+		//Debug.Log ("PotionTxt");
+		//Debug.Log (stun_timer);
+		if (active_items.Count == 0 && stun_timer == 0) {
 			current_potion_stat_text.text = "";
 			return;
 		}
 		current_potion_stat_text.text = "|";
+		if (stun_timer > 0) {
+			current_potion_stat_text.text += " Stunned |";
+		}
 		for (int i = active_items.Count-1; i >= 0; i--) {
 			current_potion_stat_text.text += " "+Item.ITEM_NAME_DICT[active_items[i].type]+" |";
 		}
 	}
+
+	public void Stunned(){
+		stun_timer = 2f;
+		UpdatePotionStatText ();
+	}
+	
 }

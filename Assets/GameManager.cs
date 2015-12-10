@@ -24,7 +24,8 @@ public class GameManager : MonoBehaviour {
 	public float flip_map_interval = 0.8f;
 	private Text status_txt;
 	public float freeze_timer = 0f;
-    
+	public bool freeze_player = false;
+
 	private Hashtable gos = new Hashtable();
 	public int player_state;
 	public AudioClip hit_clip;
@@ -110,12 +111,17 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-	public void freeze(float time_in_sec){
+	public void freeze(float time_in_sec,bool freeze_player=true){
 		freeze_timer = time_in_sec;
+		this.freeze_player = freeze_player; 
 	}
 
 	public bool freezing(){
 		return freeze_timer > 0;
+	}
+
+	public bool freezingPlayer(){
+		return freeze_timer > 0 && freeze_player;
 	}
 
 	public void SwitchCamera(){
