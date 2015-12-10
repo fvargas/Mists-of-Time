@@ -208,7 +208,7 @@ public class PathPlanning
 		}
 
 		// Set of actions for time travel
-		int numLevels = m.getNStates();
+		/*int numLevels = m.getNStates();
 		if (numLevels >= 2) {
 			int w = (n.w + 1) % numLevels;
 			if (isValid(n.x, n.y, n.z, w, visited,m))
@@ -222,7 +222,7 @@ public class PathPlanning
 				/*if (this.tag == "Dragon") {
 					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
 				} else {*/
-				cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+				/*cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
 				//}
 				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
 				pq.insert(newNode);
@@ -241,12 +241,12 @@ public class PathPlanning
 				/*if (this.tag == "Dragon") {
 					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
 				} else {*/
-				cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+				/*cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
 				//}
 				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
 				pq.insert(newNode);
 			}
-		}
+		}*/
 	}
 
 	private static bool isValid(int x, int y, int z, int w, HashSet<Vector4> visited, Map m)
