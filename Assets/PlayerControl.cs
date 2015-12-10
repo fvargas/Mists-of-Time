@@ -346,6 +346,7 @@ public class PlayerControl : MonoBehaviour
 			GetComponent<EffectControl>().showParticleEffect("wind",Item.ITEM_DURATION_DICT[items[slot_index]]);
 		} else if (items [slot_index] == Item.ITEM_SHIELD) {
 			Debug.Log ("SHIELD CONSUMED");
+			GetComponent<EffectControl>().showParticleEffect("shield",Item.ITEM_DURATION_DICT[items[slot_index]]);
 		}
 		active_items.Add(new ActiveItem(items [slot_index]));
 		item_cooldown = Item.ITEM_COOLDOWN_DICT[items [slot_index]];
