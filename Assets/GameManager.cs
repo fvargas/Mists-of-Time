@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
 	public float current_interval = 0f;
 	public int total_flips = 4;
 	public int current_flips = 0;
-	public float flip_map_interval = 0.8f;
+	public float flip_map_interval = 1.3f;
 	private Text status_txt;
 	public float freeze_timer = 0f;
 	public bool freeze_player = false;
@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour {
 			GameObject new_go = Instantiate (Resources.Load (Level1.tileMapping [new_tile_type]) as GameObject);
 			new_go.transform.position = new Vector3 (Map.getXCoordinate (row), below_y, Map.getZCoordinate (col));
 			new_go.GetComponent<TileControl> ().born (interval, Map.getYCoordinate (ver), m,true);
-			m.registerGridGameObject (new_go);
+			m.registerGridGameObject (new_go,row,ver,col);
 		}
 	}
 	public int switchState(int center_row,int center_col, int player_state){
@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour {
 			current_interval = 0f;
 			//switchState(1,1);
 		}
-		if (m.getRowNumber (GameObject.Find ("player").transform.position.x) == 14 && m.getColNumber (GameObject.Find ("player").transform.position.z) == 16) {
+		if (m.getRowNumber (GameObject.Find ("player").transform.position.x) == 21 && m.getColNumber (GameObject.Find ("player").transform.position.z) == 2) {
 			GameObject.Find("Status_Txt").GetComponent<Text>().text = "You Win!";
 		}
 	}

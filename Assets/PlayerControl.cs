@@ -268,6 +268,16 @@ public class PlayerControl : MonoBehaviour
 				ConsumeItem(2);
 			}
 
+			if(Input.GetKeyDown(KeyCode.Escape)){
+				if(gm.GetComponent<UIScript>().menuEnabled){
+					gm.GetComponent<UIScript>().EnableGameUI();
+				}
+				else
+				{
+					gm.GetComponent<UIScript>().EnableMenuUI();
+				}
+			}
+
         }
     }
 

@@ -259,11 +259,8 @@ public class Map {
 		inf_map [(int)loc.w] [(int)loc.y, (int)loc.x, (int)loc.z] += value;
 	}
 
-	public GameObject registerGridGameObject(GameObject go){
+	public GameObject registerGridGameObject(GameObject go,int row,int ver,int col){
 		//int go_type = TAG_TYPE_DICT[go.tag];
-		int row = Mathf.RoundToInt(go.transform.position.x / TILE_SIZE);
-		int ver = Mathf.RoundToInt(go.transform.position.y / TILE_SIZE);
-		int col = Mathf.RoundToInt(go.transform.position.z / TILE_SIZE);
 		
 		if(row >=0 && ver >= 0 && col >= 0 && row < getNRows() && col < getNCols() && ver < getNVers()){
 			grid_links[ver,row,col] = go;
