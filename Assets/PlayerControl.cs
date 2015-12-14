@@ -66,7 +66,7 @@ public class PlayerControl : MonoBehaviour
 		item_texts [1] = GameObject.Find ("Item_1_Txt").GetComponent<Text> ();
 		item_texts [2] = GameObject.Find ("Item_2_Txt").GetComponent<Text> ();
 		item_texts [0].text = item_texts [1].text = item_texts [2].text = Item.ITEM_NAME_DICT [Item.ITEM_EMPTY];
-		item_texts [0].color = item_texts [1].color = item_texts[2].color = Color.blue;
+		item_texts [0].color = item_texts [1].color = item_texts[2].color = Color.white;
 		active_items = new List<ActiveItem> ();
 		current_potion_stat_text = GameObject.Find ("Potion_Stat_Txt").GetComponent<Text>();
     }
@@ -82,11 +82,11 @@ public class PlayerControl : MonoBehaviour
 					item_cooldown = 0;
 				if(item_cooldown == 0){
 					for(int i=0;i<item_texts.GetLength(0);i++){
-						item_texts[i].color = Color.blue;
+						item_texts[i].color = Color.white;
 					}
 				}else{
 					for(int i=0;i<item_texts.GetLength(0);i++){
-						item_texts[i].color = Color.red;
+						item_texts[i].color = Color.gray;
 					}
 				}
 

@@ -238,6 +238,7 @@ public class GameManager : MonoBehaviour {
 		}
 		if (m.getRowNumber (GameObject.Find ("player").transform.position.x) == 21 && m.getColNumber (GameObject.Find ("player").transform.position.z) == 2) {
 			GameObject.Find("Status_Txt").GetComponent<Text>().text = "You Win!";
+			GameObject.Find("Status_Bgd").GetComponent<RawImage>().enabled = true;
 		}
 	}
 }

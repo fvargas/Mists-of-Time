@@ -29,8 +29,8 @@ public class UIScript : MonoBehaviour {
             }
             Debug.Log(button.GetComponentInChildren<Text>().text);
         }
-        menuCanvas.GetComponentInChildren<Text>().color = Color.red;
-        menuCanvas.GetComponentInChildren<Text>().text = "Mists of Time";
+        menuCanvas.GetComponentInChildren<Text>().color = Color.white;
+        GameObject.Find("Title").GetComponent<Text>().text = "Mists of Time";
         //menuCanvas.GetComponentInChildren<Text>().fontSize = 27;
 	}
 	
