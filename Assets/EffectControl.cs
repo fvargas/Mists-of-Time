@@ -30,7 +30,8 @@ public class EffectControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		List<string> keys_to_remove = new List<string> ();
-		foreach(KeyValuePair<string, float> entry in effect_timers)
+		Dictionary<string, float> effect_timers_copy = new Dictionary<string, float> (effect_timers);
+		foreach(KeyValuePair<string, float> entry in effect_timers_copy)
 		{
 			string effect_name = entry.Key;
 			float effect_timer = entry.Value;
