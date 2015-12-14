@@ -6,12 +6,6 @@ public class PathPlanning
 
 	public static List<Vector4> Plan (Vector4 start, Vector4 target, Map m, int weight)
 	{
-		// Don't bother path planning because the target is in a different time state
-		// and cannot be reached.
-		if (start.w != target.w) {
-			return new List<Vector4> ();
-		}
-
 		PQ pq = new PQ();
 		HashSet<Vector4> visited = new HashSet<Vector4>();
 		int target_x = m.getRowNumber(target.x);
@@ -214,9 +208,9 @@ public class PathPlanning
 		}
 
 		// Set of actions for time travel
-		/*int numLevels = m.getNStates();
-		if (numLevels >= 2) {
-			int w = (n.w + 1) % numLevels;
+		int numStates = m.getNStates();
+		if (numStates >= 2) {
+			int w = (n.w + 1) % numStates;
 			if (isValid(n.x, n.y, n.z, w, visited,m))
 			{
 				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
@@ -228,14 +222,14 @@ public class PathPlanning
 				/*if (this.tag == "Dragon") {
 					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
 				} else {*/
-				/*cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+				cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
 				//}
 				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
 				pq.insert(newNode);
 			}
 		}
-		if (numLevels >= 3) {
-			int w = (n.w - 1 + numLevels) % numLevels;
+		if (numStates >= 3) {
+			int w = (n.w - 1 + numStates) % numStates;
 			if (isValid(n.x, n.y, n.z, w, visited,m))
 			{
 				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
@@ -247,12 +241,12 @@ public class PathPlanning
 				/*if (this.tag == "Dragon") {
 					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
 				} else {*/
-				/*cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+				cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
 				//}
 				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
 				pq.insert(newNode);
 			}
-		}*/
+		}
 	}
 
 	private static bool isValid(int x, int y, int z, int w, HashSet<Vector4> visited, Map m)

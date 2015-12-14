@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class Movement : MonoBehaviour
 {
-
     private GameObject target_go;
     public string behav;
     private float elapsed_time = 0.0f;
@@ -313,6 +312,8 @@ public class Movement : MonoBehaviour
 
     bool ReachGoal(Vector4 dest, bool following = false)
     {
+		// Assumes it is possible to time travel from any state to another.
+		// This is true in this case, since there are three states.
 		if (dest.w != current_state) {
 			current_state = (int)dest.w;
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
@@ -323,12 +324,12 @@ public class Movement : MonoBehaviour
 		} else {
 			current_acceleration = 2.7f;
 	        
-			var obstacles = hasObstacles ();
+			/*var obstacles = hasObstacles ();
 			//*** Collision avoidance is disabled until it works reasonably
-			if (false && obstacles != 0) {
+			if (obstacles != 0) {
 				adjustDirection (this.transform.rotation, obstacles);
 				this.transform.position -= this.transform.right * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow (Time.deltaTime, 2));
-			} else {
+			} else {*/
 				var direction = (Vector3)dest - this.transform.position;
 				this.transform.LookAt ((this.transform.position + direction));
 				this.transform.Rotate (new Vector3 (0, 90, 0));
@@ -336,7 +337,7 @@ public class Movement : MonoBehaviour
 				this.transform.position += direction * (max_speed * Time.deltaTime + 0.5f * current_acceleration * Mathf.Pow (Time.deltaTime, 2));
 				//this.transform.position += delta;
 				//this.anim.SetFloat("Speed",Mathf.Sqrt(Mathf.Pow(delta.x,2)+Mathf.Pow(delta.z,2)));
-			}
+			//}
 
 			var bearing = (Vector3)dest - this.transform.position;
 			return bearing.magnitude < 1.0f;

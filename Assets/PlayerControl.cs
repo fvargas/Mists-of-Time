@@ -380,7 +380,7 @@ public class PlayerControl : MonoBehaviour
 	}
 
 	public void Stunned(){
-		stun_timer = 2f;
+		stun_timer = 0.8f;
 		UpdatePotionStatText ();
 	}
 	
