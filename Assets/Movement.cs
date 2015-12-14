@@ -53,6 +53,8 @@ public class Movement : MonoBehaviour
 	public float time_travel_timer;
 	private bool movable = true;
 
+	public bool canTimeTravel = true;
+
 	SoundManager sm;
 
     // Use this for initialization
@@ -88,7 +90,7 @@ public class Movement : MonoBehaviour
 		next_col = m.getColNumber(this.transform.position.z);
 		if (behav == "Chase") {
 			Vector3 my_pos = this.transform.position;
-			target_path = PathPlanning.Plan (new Vector4(my_pos.x, my_pos.y, my_pos.z, current_state), prev_target_loc, m, strength);
+			target_path = PathPlanning.Plan (new Vector4(my_pos.x, my_pos.y, my_pos.z, current_state), prev_target_loc, m, strength, canTimeTravel);
 		}
 		if (!isPlayer) {
 			m.updateInfluenceMap (new Vector4 (0, 0, 0, -1), prev_location, strength);
@@ -204,7 +206,7 @@ public class Movement : MonoBehaviour
 				current_interval = 0f;
 				prev_target_loc = target_loc;
 				Vector3 pos = this.transform.position;
-				target_path = PathPlanning.Plan (prev_location, target_loc, m, strength);
+				target_path = PathPlanning.Plan (prev_location, target_loc, m, strength, canTimeTravel);
 			}
 
 			followPath ();

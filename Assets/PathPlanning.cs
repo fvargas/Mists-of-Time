@@ -4,8 +4,12 @@ using System.Collections.Generic;
 public class PathPlanning
 {
 
-	public static List<Vector4> Plan (Vector4 start, Vector4 target, Map m, int weight)
+	public static List<Vector4> Plan (Vector4 start, Vector4 target, Map m, int weight, bool canTimeTravel)
 	{
+		if (!canTimeTravel && target.w != start.w) {
+			return new List<Vector4> ();
+		}
+
 		PQ pq = new PQ();
 		HashSet<Vector4> visited = new HashSet<Vector4>();
 		int target_x = m.getRowNumber(target.x);
@@ -33,13 +37,14 @@ public class PathPlanning
 				return n.path;
 			}
 
-			processNextActions(pq, visited, n, target_x, target_y, target_z, target_w, m, inf_map);
+			processNextActions(pq, visited, n, target_x, target_y, target_z, target_w, m, inf_map, canTimeTravel);
 		}
 
 		return new List<Vector4> ();
 	}
 
-	private static void processNextActions(PQ pq, HashSet<Vector4> visited, Node n, int target_x, int target_y, int target_z, int target_w, Map m, int[][,,] inf_map)
+	private static void processNextActions(PQ pq, HashSet<Vector4> visited, Node n, int target_x, int target_y, int target_z, int target_w,
+	                                       Map m, int[][,,] inf_map, bool canTimeTravel)
 	{
 		bool atLadder = m.getGridValue(n.w, n.x, n.y, n.z) == Map.GO_LADDER;
 
@@ -208,43 +213,43 @@ public class PathPlanning
 		}
 
 		// Set of actions for time travel
-		int numStates = m.getNStates();
-		if (numStates >= 2) {
-			int w = (n.w + 1) % numStates;
-			if (isValid(n.x, n.y, n.z, w, visited,m))
-			{
-				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				Vector4 waypoint = new Vector4(n.x, n.y, n.z, w);
-				newPath.Add(waypoint);
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
-				} else {*/
-				cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
-				//}
-				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
-				pq.insert(newNode);
+		if (canTimeTravel) {
+			int numStates = m.getNStates ();
+			if (numStates >= 2) {
+				int w = (n.w + 1) % numStates;
+				if (isValid (n.x, n.y, n.z, w, visited, m)) {
+					float h = Node.euclideanDistance (n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
+					List<Vector4> newPath = new List<Vector4> (n.path);
+					Vector4 waypoint = new Vector4 (n.x, n.y, n.z, w);
+					newPath.Add (waypoint);
+					
+					float cost;
+					/*if (this.tag == "Dragon") {
+						cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
+					} else {*/
+					cost = n.g + Map.getInfluenceMapValue (waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+					//}
+					Node newNode = new Node (n.x, n.y, n.z, w, cost, h, newPath);
+					pq.insert (newNode);
+				}
 			}
-		}
-		if (numStates >= 3) {
-			int w = (n.w - 1 + numStates) % numStates;
-			if (isValid(n.x, n.y, n.z, w, visited,m))
-			{
-				float h = Node.euclideanDistance(n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
-				List<Vector4> newPath = new List<Vector4>(n.path);
-				Vector4 waypoint = new Vector4(n.x, n.y, n.z, w);
-				newPath.Add(waypoint);
-				
-				float cost;
-				/*if (this.tag == "Dragon") {
-					cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
-				} else {*/
-				cost = n.g + Map.getInfluenceMapValue(waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
-				//}
-				Node newNode = new Node(n.x, n.y, n.z, w, cost, h, newPath);
-				pq.insert(newNode);
+			if (numStates >= 3) {
+				int w = (n.w - 1 + numStates) % numStates;
+				if (isValid (n.x, n.y, n.z, w, visited, m)) {
+					float h = Node.euclideanDistance (n.x, n.y, n.z, w, target_x, target_y, target_z, target_w);
+					List<Vector4> newPath = new List<Vector4> (n.path);
+					Vector4 waypoint = new Vector4 (n.x, n.y, n.z, w);
+					newPath.Add (waypoint);
+					
+					float cost;
+					/*if (this.tag == "Dragon") {
+						cost = n.g + GameManager.dragonGridValueMap[m.getGridValue(n.w, n.x - 1, n.y, n.z)];
+					} else {*/
+					cost = n.g + Map.getInfluenceMapValue (waypoint, inf_map);//GameManager.gridValueMap[m.getGridValue(w, n.x, n.y, n.z)];
+					//}
+					Node newNode = new Node (n.x, n.y, n.z, w, cost, h, newPath);
+					pq.insert (newNode);
+				}
 			}
 		}
 	}
