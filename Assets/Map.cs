@@ -8,7 +8,7 @@ public class Map {
 	private int[][,,] influence_map;
 	private GameObject [,,] grid_links;
 	public static float TILE_SIZE = 1f;
-	private readonly string DEFAULT_FLOOR_TILE = "InterBox";
+	private readonly string DEFAULT_FLOOR_TILE = "SafeBox";
 
 	/**
 	 * Types of Game Objects.
@@ -98,9 +98,6 @@ public class Map {
 	public static GameObject renderGameObject(Vector3 loc, string resource) {
 
 		GameObject obj = (GameObject) UnityEngine.Object.Instantiate(Resources.Load(resource) as GameObject, loc, Quaternion.identity);
-		if (resource == "crystalB") {
-			obj.transform.localScale = new Vector3 (2f, 2f, 2f);
-		}
 		return obj;
 	}
 

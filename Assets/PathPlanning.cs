@@ -258,7 +258,7 @@ public class PathPlanning
 		
 		bool squareInBounds = 0 <= w && w < numLevels && 0 <= x && x < numRows && 0 <= y && y < numVers && 0 <= z && z < numCols;
 		bool haveVisited = visited.Contains(new Vector4(x, y, z, w));
-		bool ret = squareInBounds && !haveVisited && GameManager.gridValueMap[m.getGridValue(w, x, y, z)] >= 0;
+		bool ret = squareInBounds && !haveVisited && Level1.tileMapping[m.getGridValue(w, x, y, z)] == "EMPTY";
 		
 		return ret;
 	}
