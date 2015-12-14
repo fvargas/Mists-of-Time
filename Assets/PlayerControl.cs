@@ -148,7 +148,7 @@ public class PlayerControl : MonoBehaviour
                 current_speed = max_speed;
             }
 
-			/* Stun Effect */
+			// Stun Effect
 			if(stun_timer > 0 && current_speed > 1f){
 				current_speed = 1f;
 			}
